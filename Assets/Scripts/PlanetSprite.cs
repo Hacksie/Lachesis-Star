@@ -7,8 +7,8 @@ namespace HackedDesign
     [RequireComponent(typeof(SpriteRenderer))]
     public class PlanetSprite : MonoBehaviour
     {
-        private SpriteRenderer spriteRenderer;
-        [SerializeField] private Palette palette;
+        private SpriteRenderer spriteRenderer = null;
+        [SerializeField] private Palette palette = null;
         [SerializeField] private int width = 32;
         [SerializeField] private int height = 32;
         [SerializeField] private int pixelsPerUnit = 16;
@@ -29,13 +29,13 @@ namespace HackedDesign
             //float landColor = Random.Range(0.0f, 1.0f);
             //float waterColor = Random.Range(0.0f, 1.0f);
 
-            bool[,] landMass = new bool[width, height];
+            int[,] landMass = new int[width, height];
 
             for (int y = 0; y < width; y++)
             {
                 for (int x = 0; x < width; x++)
                 {
-                    landMass[x, y] = Random.value >= 0.5;
+                    landMass[x, y] = Mathf.RoundToInt(Random.value);
                 }
             }
 
@@ -45,30 +45,30 @@ namespace HackedDesign
                 {
                     if (x != 0 && y != 0 && x != width - 1 && y != height - 1)
                     {
-                        float score = landMass[x, y] ? 1.0f : 0.0f;
-                        score += landMass[x - 1, y - 1] ? 0.2f : -0.2f;
-                        score += landMass[x, y - 1] ? 0.2f : -0.2f;
-                        score += landMass[x + 1, y - 1] ? 0.2f : -0.2f;
-                        score += landMass[x - 1, y] ? 0.2f : -0.2f;
-                        score += landMass[x + 1, y] ? 0.2f : -0.2f;
-                        score += landMass[x - 1, y + 1] ? 0.2f : -0.2f;
-                        score += landMass[x, y + 1] ? 0.2f : -0.2f;
-                        score += landMass[x + 1, y + 1] ? 0.2f : -0.2f;
+                        float score = landMass[x, y] == 1 ? 1.0f : 0.0f;
+                        score += landMass[x - 1, y - 1] == 1 ? 0.2f : -0.2f;
+                        score += landMass[x, y - 1] == 1 ? 0.2f : -0.2f;
+                        score += landMass[x + 1, y - 1] == 1 ? 0.2f : -0.2f;
+                        score += landMass[x - 1, y] == 1 ? 0.2f : -0.2f;
+                        score += landMass[x + 1, y] == 1 ? 0.2f : -0.2f;
+                        score += landMass[x - 1, y + 1] == 1 ? 0.2f : -0.2f;
+                        score += landMass[x, y + 1] == 1 ? 0.2f : -0.2f;
+                        score += landMass[x + 1, y + 1] == 1 ? 0.2f : -0.2f;
 
                         score = Mathf.Clamp(score, 0, 1);
-                        landMass[x, y] = score > 0.5f;
+                        landMass[x, y] = Mathf.RoundToInt(score);
                     }
 
-                    int dist = Mathf.RoundToInt((new Vector2(x + 0.0f, y + 0.0f) - new Vector2(width / 4, height - (height / 3))).magnitude / width * 4);
+                    int dist = Mathf.RoundToInt((new Vector2(x + 0.0f, y + 0.0f) - new Vector2(width / 3, height - (height / 3))).magnitude / width * palette.step);
                     
-                    if (landMass[x,y])
+                    if (landMass[x,y] == 1)
                     {
                         //sprite.SetPixel(x, y, Random.ColorHSV(landColor, landColor + 0.1f, 0.3f, 0.35f, 0.9f - dist, 1f - dist));
-                        sprite.SetPixel(x, y, palette.palette[landColor * 4 + dist]);
+                        sprite.SetPixel(x, y, palette.palette[landColor * palette.step + dist]);
                     }
                     else
                     {
-                        sprite.SetPixel(x, y, palette.palette[waterColor * 4 + dist]);
+                        sprite.SetPixel(x, y, palette.palette[waterColor * palette.step + dist]);
                         //sprite.SetPixel(x, y, Random.ColorHSV(waterColor, waterColor + 0.1f, 0.65f, 0.7f, 0.9f - dist, 1f - dist));
                     }
                 }

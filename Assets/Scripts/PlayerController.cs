@@ -24,18 +24,21 @@ namespace HackedDesign
         // Update is called once per frame
         void Update()
         {
-            transform.Rotate(new Vector3(0, 0, -1.0f * turn * turnRate * Time.deltaTime));
-
-            float force = thrust * maxThrust * Time.deltaTime;
-
-            rigidBody.AddRelativeForce(new Vector2(0, force), ForceMode2D.Impulse);
-            if (rigidBody.velocity.magnitude > maxThrust)
+            if (Game.instance.gameState == GameStateEnum.PLAYING && Game.instance.state.playingState == PlayStateEnum.PLAY)
             {
-                rigidBody.velocity = rigidBody.velocity.normalized * maxThrust;
+                transform.Rotate(new Vector3(0, 0, -1.0f * turn * turnRate * Time.deltaTime));
+
+                float force = thrust * maxThrust * Time.deltaTime;
+
+                rigidBody.AddRelativeForce(new Vector2(0, force), ForceMode2D.Impulse);
+                if (rigidBody.velocity.magnitude > maxThrust)
+                {
+                    rigidBody.velocity = rigidBody.velocity.normalized * maxThrust;
+                }
             }
         }
 
-        public void UpdateRotation(InputAction.CallbackContext context)
+        public void Turn(InputAction.CallbackContext context)
         {
 
             if(context.performed)
@@ -48,7 +51,7 @@ namespace HackedDesign
             }
         }
 
-        public void UpdateThrust(InputAction.CallbackContext context)
+        public void Thrust(InputAction.CallbackContext context)
         {
             if(context.performed)
             {
@@ -60,5 +63,21 @@ namespace HackedDesign
             }
         }
 
+        public void Brake(InputAction.CallbackContext context)
+        {
+            if (context.performed)
+            {
+                thrust = 0.0f;
+                rigidBody.velocity = Vector2.zero;
+            }
+        }
+
+        public void Ship(InputAction.CallbackContext context)
+        {
+            if (context.performed)
+            {
+                Game.instance.state.ToggleCargo();
+            }
+        }
     }
 }

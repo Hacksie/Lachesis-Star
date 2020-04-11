@@ -5,7 +5,6 @@ using UnityEngine;
 namespace HackedDesign
 {
     [CreateAssetMenu(fileName = "Palette", menuName = "Lachesis/Palette")]
-    [System.Serializable]
     public class Palette : ScriptableObject
     {
         public int step = 4;

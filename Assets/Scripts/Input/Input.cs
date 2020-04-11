@@ -41,6 +41,22 @@ public class @Input : IInputActionCollection, IDisposable
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Brake"",
+                    ""type"": ""Button"",
+                    ""id"": ""766f8098-d0ec-4821-8fc4-f9e47a2e44fd"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Ship"",
+                    ""type"": ""Button"",
+                    ""id"": ""1e1f44aa-cd3a-471b-b7ee-4344b3932022"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -274,6 +290,50 @@ public class @Input : IInputActionCollection, IDisposable
                     ""action"": ""Thrust"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2e5c90c3-ba21-426b-88c0-e279ec78e97d"",
+                    ""path"": ""<XInputController>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Brake"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""881cb56a-0a37-4f8d-97bf-84f0567ccd53"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Brake"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e67ccce0-8446-40c6-95ad-9508190fe1cb"",
+                    ""path"": ""<XInputController>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Ship"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""30e3e23e-d2ed-4ee8-a633-a9bbb8bde38f"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Ship"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -852,6 +912,8 @@ public class @Input : IInputActionCollection, IDisposable
         m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
         m_Player_Turn = m_Player.FindAction("Turn", throwIfNotFound: true);
         m_Player_Thrust = m_Player.FindAction("Thrust", throwIfNotFound: true);
+        m_Player_Brake = m_Player.FindAction("Brake", throwIfNotFound: true);
+        m_Player_Ship = m_Player.FindAction("Ship", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -916,6 +978,8 @@ public class @Input : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_Interact;
     private readonly InputAction m_Player_Turn;
     private readonly InputAction m_Player_Thrust;
+    private readonly InputAction m_Player_Brake;
+    private readonly InputAction m_Player_Ship;
     public struct PlayerActions
     {
         private @Input m_Wrapper;
@@ -923,6 +987,8 @@ public class @Input : IInputActionCollection, IDisposable
         public InputAction @Interact => m_Wrapper.m_Player_Interact;
         public InputAction @Turn => m_Wrapper.m_Player_Turn;
         public InputAction @Thrust => m_Wrapper.m_Player_Thrust;
+        public InputAction @Brake => m_Wrapper.m_Player_Brake;
+        public InputAction @Ship => m_Wrapper.m_Player_Ship;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -941,6 +1007,12 @@ public class @Input : IInputActionCollection, IDisposable
                 @Thrust.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnThrust;
                 @Thrust.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnThrust;
                 @Thrust.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnThrust;
+                @Brake.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBrake;
+                @Brake.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBrake;
+                @Brake.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBrake;
+                @Ship.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShip;
+                @Ship.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShip;
+                @Ship.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShip;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -954,6 +1026,12 @@ public class @Input : IInputActionCollection, IDisposable
                 @Thrust.started += instance.OnThrust;
                 @Thrust.performed += instance.OnThrust;
                 @Thrust.canceled += instance.OnThrust;
+                @Brake.started += instance.OnBrake;
+                @Brake.performed += instance.OnBrake;
+                @Brake.canceled += instance.OnBrake;
+                @Ship.started += instance.OnShip;
+                @Ship.performed += instance.OnShip;
+                @Ship.canceled += instance.OnShip;
             }
         }
     }
@@ -1113,6 +1191,8 @@ public class @Input : IInputActionCollection, IDisposable
         void OnInteract(InputAction.CallbackContext context);
         void OnTurn(InputAction.CallbackContext context);
         void OnThrust(InputAction.CallbackContext context);
+        void OnBrake(InputAction.CallbackContext context);
+        void OnShip(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
