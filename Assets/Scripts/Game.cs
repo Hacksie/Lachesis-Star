@@ -13,12 +13,13 @@ namespace HackedDesign
         [SerializeField] public List<State> slots = new List<State>(3);
         [SerializeField] public int currentSlot = 0;
         [SerializeField] public State state = null;
-        [Header("Game Objects")]
+        [Header("Configurated Game Objects")]
         [SerializeField] public PlayerController player;
+        [SerializeField] public Universe universe;
 
         public static Game instance;
 
-        
+
 
         public Game()
         {
@@ -28,10 +29,14 @@ namespace HackedDesign
         // Start is called before the first frame update
         void Start()
         {
-            var slotFiles = LoadSlots();
-            foreach(var f in slotFiles)
+            
+            LoadSlots();
+
+            /*
+
+            foreach (var f in slotFiles)
             {
-                if(f.Contains("SaveFile0.json"))
+                if (f.Contains("SaveFile0.json"))
                 {
 
                 }
@@ -45,10 +50,28 @@ namespace HackedDesign
                 }
                 Logger.Log(name, f);
 
-            }
+            }*/
 
             //state = slots[currentSlot];
             //state.gameState = GameStateEnum.PLAYING;
+        }
+
+        State LoadSaveFile(int slot)
+        {
+            var path = Path.Combine(Application.persistentDataPath, $"SaveFile{slot}.json");
+            Logger.Log(name, "Attempting to load ", path);
+            if (File.Exists(path))
+            {
+                Logger.Log(name, "Loading ", path);
+                var contents = File.ReadAllText(path);
+                return JsonUtility.FromJson<State>(contents);
+            }
+            else
+            {
+                Logger.Log(name, "Save file does not exist ", path);
+            }
+
+            return null;
         }
 
         // Update is called once per frame
@@ -57,9 +80,11 @@ namespace HackedDesign
             UpdateTime();
         }
 
-        public string[] LoadSlots()
+        public void LoadSlots()
         {
-            return Directory.GetFiles(Application.persistentDataPath,"SaveFile*.json");
+            slots[0] = LoadSaveFile(0);
+            slots[1] = LoadSaveFile(1);
+            slots[2] = LoadSaveFile(2);
         }
 
         public void SaveGame()
@@ -67,13 +92,24 @@ namespace HackedDesign
             state.Save(currentSlot);
         }
 
+        public void DeleteSaveGame(int slot)
+        {
+            File.Delete(Path.Combine(Application.persistentDataPath, $"SaveFile{slot}.json"));
+            slots[slot] = null;
+        }
+
         public void StartGame(int slot)
         {
             currentSlot = slot;
             gameState = GameStateEnum.PLAYING;
-            if(!state.started)
+            if (slots[currentSlot] == null || !slots[currentSlot].started)
             {
                 NewGame();
+            }
+            else
+            {
+                state = slots[currentSlot];
+                LoadGame();
             }
 
             SaveGame();
@@ -84,25 +120,85 @@ namespace HackedDesign
         public void NewGame()
         {
             state = slots[currentSlot] = new State();
+            state.planets = universe.GenerateNewPlanets();
+            state.ores = universe.GenerateNewOres();
+            
+            
+            universe.SpawnPlanets(state.planets);
+            universe.SpawnOres(state.ores);
             state.started = true;
         }
 
         public void LoadGame()
         {
+            universe.SpawnPlanets(state.planets);
+        }
 
+        public void SetPlayStatePlay()
+        {
+            SaveGame();
+            state.playingState = PlayStateEnum.PLAY;
+        }
+
+        public void SetPlayStateMap()
+        {
+            SaveGame();
+            state.playingState = PlayStateEnum.MAP;
+        }
+
+        public void SetPlayStateCargo()
+        {
+            SaveGame();
+            state.playingState = PlayStateEnum.CARGO;
+        }
+
+        public void ToggleCargo()
+        {
+            if (state.playingState == PlayStateEnum.PLAY)
+            {
+                SaveGame();
+                state.playingState = PlayStateEnum.CARGO;
+            }
+            else if (state.playingState == PlayStateEnum.CARGO)
+            {
+                SaveGame();
+                state.playingState = PlayStateEnum.PLAY;
+            }
+        }
+
+        public void ToggleMap()
+        {
+            if (state.playingState == PlayStateEnum.PLAY)
+            {
+                SaveGame();
+                state.playingState = PlayStateEnum.MAP;
+            }
+            else if (state.playingState == PlayStateEnum.MAP)
+            {
+                SaveGame();
+                state.playingState = PlayStateEnum.PLAY;
+            }
+        }
+
+        public void QuitPlaying()
+        {
+            SaveGame();
+            gameState = GameStateEnum.MAINMENU;
         }
 
         private void UpdateTime()
         {
-            switch(gameState)
+            switch (gameState)
             {
                 case GameStateEnum.MAINMENU:
                     Time.timeScale = 0;
                     break;
                 case GameStateEnum.PLAYING:
-                    switch(state.playingState)
+                    switch (state.playingState)
                     {
+                        case PlayStateEnum.INTRO:
                         case PlayStateEnum.CARGO:
+                        case PlayStateEnum.MAP:
                         case PlayStateEnum.END:
                             Time.timeScale = 0;
                             break;

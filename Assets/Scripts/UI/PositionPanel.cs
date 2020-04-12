@@ -10,7 +10,8 @@ namespace HackedDesign
         private CanvasGroup canvasGroup = null;
         [SerializeField] Text XText = null;
         [SerializeField] Text YText = null;
-        [SerializeField] Transform playerTransform = null;
+        [SerializeField] Text SpeedText = null;
+        [SerializeField] PlayerController player = null;
         
         void Awake()
         {
@@ -23,9 +24,13 @@ namespace HackedDesign
             {
                 Logger.LogError(name, "YText is null");
             }
-            if (playerTransform == null)
+            if(SpeedText == null)
             {
-                Logger.LogError(name, "playerTransform is null");
+                Logger.LogError(name, "SpeedText is null");
+            }
+            if (player == null)
+            {
+                Logger.LogError(name, "player is null");
             }
         }
 
@@ -43,15 +48,13 @@ namespace HackedDesign
                 canvasGroup.alpha = 0;
                 canvasGroup.interactable = false;
             }
-
-            
-            //positionText.text =  $"{playerTransform.position.x:N1} , {playerTransform.position.y:N1}";
         }
 
         private void UpdatePanel()
         {
-            XText.text = $"{playerTransform.position.x:N1}";
-            YText.text = $"{playerTransform.position.y:N1}";
+            XText.text = $"{player.transform.position.x:N1}";
+            YText.text = $"{player.transform.position.y:N1}";
+            SpeedText.text = $"{player.currentThrust:N1} / {player.maxThrust:N1}";
         }
     }
 }

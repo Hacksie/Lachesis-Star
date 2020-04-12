@@ -173,7 +173,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1100017077318591141}
   - component: {fileID: 1100017077318591138}
-  - component: {fileID: 1100017077318591140}
   - component: {fileID: 303593475749661534}
   - component: {fileID: 2168831043637974400}
   m_Layer: 0
@@ -251,22 +250,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 0
   m_MaskInteraction: 1
   m_SpriteSortPoint: 0
---- !u!114 &1100017077318591140
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1100017077318591139}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f96a36d51dbc5cc4dabc7560663729b5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  palette: {fileID: 11400000, guid: 2be5f0e5e7db5ec46ae97ace9e52ddb6, type: 2}
-  width: 32
-  height: 32
-  pixelsPerUnit: 16
 --- !u!114 &303593475749661534
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -279,9 +262,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e4a5cb6519758843bbb68bfe014c745, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  name: 
-  nameGen: {fileID: 11400000, guid: e949cd87a351f3d4898d0f0d657b9d74, type: 2}
+  planetState:
+    name: 
+    size: 0
+    landHue: 0
+    waterHue: 0
+    x: 0
+    y: 0
+  palette: {fileID: 11400000, guid: 2be5f0e5e7db5ec46ae97ace9e52ddb6, type: 2}
   worldText: {fileID: 8588480253279100486}
+  pixelsPerUnit: 16
 --- !u!58 &2168831043637974400
 CircleCollider2D:
   m_ObjectHideFlags: 0

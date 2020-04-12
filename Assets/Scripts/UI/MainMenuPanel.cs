@@ -15,6 +15,7 @@ namespace HackedDesign
         [SerializeField] private Text slot0desc = null;
         [SerializeField] private Text slot1desc = null;
         [SerializeField] private Text slot2desc = null;
+        [SerializeField] private int selectedSlot = 0;
 
         // Start is called before the first frame update
         void Start()
@@ -29,12 +30,20 @@ namespace HackedDesign
             {
                 canvasGroup.alpha = 1;
                 canvasGroup.interactable = true;
+                canvasGroup.blocksRaycasts = true;
                 UpdatePanels();
             }
             else
             {
                 canvasGroup.alpha = 0;
                 canvasGroup.interactable = false;
+                canvasGroup.blocksRaycasts = false;
+                startPanel.blocksRaycasts = false;
+                optionsPanel.blocksRaycasts = false;
+                creditsPanel.blocksRaycasts = false;
+                startPanel.interactable = false;
+                optionsPanel.interactable = false;
+                creditsPanel.interactable = false;
             }
         }
 
@@ -44,35 +53,47 @@ namespace HackedDesign
             {
                 case MenuStateEnum.NONE:
                     startPanel.alpha = 0;
-                    //startPanel.interactable = false;
                     optionsPanel.alpha = 0;
-                    //optionsPanel.interactable = false;
                     creditsPanel.alpha = 0;
-                    //creditsPanel.interactable = false;
+                    startPanel.blocksRaycasts = false;
+                    optionsPanel.blocksRaycasts = false;
+                    creditsPanel.blocksRaycasts = false;
+                    startPanel.interactable = false;
+                    optionsPanel.interactable = false;
+                    creditsPanel.interactable = false;
                     break;
                 case MenuStateEnum.START:
                     startPanel.alpha = 1;
-                    //startPanel.interactable = true;
                     optionsPanel.alpha = 0;
-                    //optionsPanel.interactable = false;
                     creditsPanel.alpha = 0;
-                    //creditsPanel.interactable = false;
+                    startPanel.blocksRaycasts = true;
+                    optionsPanel.blocksRaycasts = false;
+                    creditsPanel.blocksRaycasts = false;
+                    startPanel.interactable = true;
+                    optionsPanel.interactable = false;
+                    creditsPanel.interactable = false;
                     UpdateSlots();
                     break;
                 case MenuStateEnum.OPTIONS:
                     startPanel.alpha = 0;
-                    //startPanel.interactable = false;
                     optionsPanel.alpha = 1;
-                    //optionsPanel.interactable = true;
                     creditsPanel.alpha = 0;
-                    //creditsPanel.interactable = false;
+                    startPanel.blocksRaycasts = false;
+                    optionsPanel.blocksRaycasts = true;
+                    creditsPanel.blocksRaycasts = false;
+                    startPanel.interactable = false;
+                    optionsPanel.interactable = true;
+                    creditsPanel.interactable = false;
                     break;
                 case MenuStateEnum.CREDITS:
                     startPanel.alpha = 0;
-                    startPanel.interactable = false;
                     optionsPanel.alpha = 0;
-                    optionsPanel.interactable = false;
                     creditsPanel.alpha = 1;
+                    startPanel.blocksRaycasts = false;
+                    optionsPanel.blocksRaycasts = false;
+                    creditsPanel.blocksRaycasts = true;
+                    startPanel.interactable = false;
+                    optionsPanel.interactable = false;
                     creditsPanel.interactable = true;
                     break;
             }
@@ -91,28 +112,49 @@ namespace HackedDesign
             Game.instance.menuState = MenuStateEnum.START;
         }
 
+        public void OptionsClicked()
+        {
+            Logger.Log(name, "Start Clicked");
+            Game.instance.menuState = MenuStateEnum.OPTIONS;
+        }
+
+        public void CreditsClicked()
+        {
+            Logger.Log(name, "Start Clicked");
+            Game.instance.menuState = MenuStateEnum.CREDITS;
+        }
+
         public void Slot0Clicked()
         {
             Logger.Log(name, "Slot 0 Clicked");
-            Game.instance.menuState = MenuStateEnum.NONE;
-            UpdatePanels();
-            Game.instance.StartGame(0);
+            selectedSlot = 0;
         }
 
         public void Slot1Clicked()
         {
             Logger.Log(name, "Slot 1 Clicked");
-            Game.instance.menuState = MenuStateEnum.NONE;
-            UpdatePanels();
-            Game.instance.StartGame(1);
+            selectedSlot = 1;
         }
 
         public void Slot2Clicked()
         {
-            Logger.Log(name, "Slot 2 Clicked"); 
+            Logger.Log(name, "Slot 2 Clicked");
+            selectedSlot = 2;
+        }
+
+        public void StartGameClicked()
+        {
+            Logger.Log(name, "Start Game Clicked");
             Game.instance.menuState = MenuStateEnum.NONE;
             UpdatePanels();
-            Game.instance.StartGame(2);
+            Game.instance.StartGame(selectedSlot);
+        }
+
+        public void DeleteSlotClicked()
+        {
+            Logger.Log(name, "Delete Slot Clicked ", selectedSlot.ToString());
+            Game.instance.DeleteSaveGame(selectedSlot);
+            UpdateSlots();
         }
     }
 }

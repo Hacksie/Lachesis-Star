@@ -7,13 +7,19 @@ namespace HackedDesign
 {
     public class PlayerController : MonoBehaviour
     {
+        [Header("Runtime GameObjects")]
         [SerializeField] private Rigidbody2D rigidBody = null;
+        [Header("Configured GameObjects")]
+        [SerializeField] private ShipData shipData = null;
+        [Header("Settings")]
         [SerializeField] private float turnRate = 180.0f;
-        [SerializeField] private float maxThrust = 5.0f;
+        //[SerializeField] private float maxThrust = 5.0f;
 
         private float turn = 0.0f;
 
-        private float thrust = 0.0f;
+        public float thrust = 0.0f;
+        public float currentThrust = 0.0f;
+        public float maxThrust = 0.0f;
 
         // Start is called before the first frame update
         void Awake()
@@ -28,7 +34,13 @@ namespace HackedDesign
             {
                 transform.Rotate(new Vector3(0, 0, -1.0f * turn * turnRate * Time.deltaTime));
 
-                float force = thrust * maxThrust * Time.deltaTime;
+                var engine1 = shipData.GetEngine(Game.instance.state.shipState.engines[0]);
+                var engine2 = shipData.GetEngine(Game.instance.state.shipState.engines[1]);
+
+                maxThrust = engine1.thrustRate + engine2.thrustRate;
+                currentThrust = thrust * maxThrust;
+
+                float force = currentThrust * Time.deltaTime;
 
                 rigidBody.AddRelativeForce(new Vector2(0, force), ForceMode2D.Impulse);
                 if (rigidBody.velocity.magnitude > maxThrust)
@@ -76,7 +88,24 @@ namespace HackedDesign
         {
             if (context.performed)
             {
-                Game.instance.state.ToggleCargo();
+                Game.instance.ToggleCargo();
+            }
+        }
+
+        public void Map(InputAction.CallbackContext context)
+        {
+            if(context.performed)
+            {
+                Game.instance.ToggleMap();
+                
+            }
+        }
+
+        public void Quit(InputAction.CallbackContext context)
+        {
+            if(context.performed)
+            {
+                Game.instance.QuitPlaying();
             }
         }
     }

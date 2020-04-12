@@ -13,7 +13,7 @@ namespace HackedDesign
         [SerializeField] private List<string> stems = null;
         [SerializeField] private List<string> suffixes = null;
 
-        public string GetName()
+        public string GenerateName()
         {
             string name = "";
             if(Random.value < prefixChance)

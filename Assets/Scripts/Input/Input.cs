@@ -57,6 +57,14 @@ public class @Input : IInputActionCollection, IDisposable
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Quit"",
+                    ""type"": ""Button"",
+                    ""id"": ""b2a4fbf3-90c0-460a-b88d-b7f8ac927f61"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -332,6 +340,28 @@ public class @Input : IInputActionCollection, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""Ship"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""044e7271-a16e-4325-8541-6c5a9c779932"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Quit"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""83d47796-0713-4198-a188-8093c15735ee"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Quit"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -914,6 +944,7 @@ public class @Input : IInputActionCollection, IDisposable
         m_Player_Thrust = m_Player.FindAction("Thrust", throwIfNotFound: true);
         m_Player_Brake = m_Player.FindAction("Brake", throwIfNotFound: true);
         m_Player_Ship = m_Player.FindAction("Ship", throwIfNotFound: true);
+        m_Player_Quit = m_Player.FindAction("Quit", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -980,6 +1011,7 @@ public class @Input : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_Thrust;
     private readonly InputAction m_Player_Brake;
     private readonly InputAction m_Player_Ship;
+    private readonly InputAction m_Player_Quit;
     public struct PlayerActions
     {
         private @Input m_Wrapper;
@@ -989,6 +1021,7 @@ public class @Input : IInputActionCollection, IDisposable
         public InputAction @Thrust => m_Wrapper.m_Player_Thrust;
         public InputAction @Brake => m_Wrapper.m_Player_Brake;
         public InputAction @Ship => m_Wrapper.m_Player_Ship;
+        public InputAction @Quit => m_Wrapper.m_Player_Quit;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1013,6 +1046,9 @@ public class @Input : IInputActionCollection, IDisposable
                 @Ship.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShip;
                 @Ship.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShip;
                 @Ship.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShip;
+                @Quit.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnQuit;
+                @Quit.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnQuit;
+                @Quit.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnQuit;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -1032,6 +1068,9 @@ public class @Input : IInputActionCollection, IDisposable
                 @Ship.started += instance.OnShip;
                 @Ship.performed += instance.OnShip;
                 @Ship.canceled += instance.OnShip;
+                @Quit.started += instance.OnQuit;
+                @Quit.performed += instance.OnQuit;
+                @Quit.canceled += instance.OnQuit;
             }
         }
     }
@@ -1193,6 +1232,7 @@ public class @Input : IInputActionCollection, IDisposable
         void OnThrust(InputAction.CallbackContext context);
         void OnBrake(InputAction.CallbackContext context);
         void OnShip(InputAction.CallbackContext context);
+        void OnQuit(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
