@@ -65,6 +65,14 @@ public class @Input : IInputActionCollection, IDisposable
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""MousePoint"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""2f0f1149-1fb3-4dc3-a766-73e5223f2ffa"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -362,6 +370,17 @@ public class @Input : IInputActionCollection, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""Quit"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""399b51bc-f4eb-4f8a-9acc-6a9b6e8cdd49"",
+                    ""path"": ""<Mouse>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""MousePoint"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -945,6 +964,7 @@ public class @Input : IInputActionCollection, IDisposable
         m_Player_Brake = m_Player.FindAction("Brake", throwIfNotFound: true);
         m_Player_Ship = m_Player.FindAction("Ship", throwIfNotFound: true);
         m_Player_Quit = m_Player.FindAction("Quit", throwIfNotFound: true);
+        m_Player_MousePoint = m_Player.FindAction("MousePoint", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1012,6 +1032,7 @@ public class @Input : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_Brake;
     private readonly InputAction m_Player_Ship;
     private readonly InputAction m_Player_Quit;
+    private readonly InputAction m_Player_MousePoint;
     public struct PlayerActions
     {
         private @Input m_Wrapper;
@@ -1022,6 +1043,7 @@ public class @Input : IInputActionCollection, IDisposable
         public InputAction @Brake => m_Wrapper.m_Player_Brake;
         public InputAction @Ship => m_Wrapper.m_Player_Ship;
         public InputAction @Quit => m_Wrapper.m_Player_Quit;
+        public InputAction @MousePoint => m_Wrapper.m_Player_MousePoint;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1049,6 +1071,9 @@ public class @Input : IInputActionCollection, IDisposable
                 @Quit.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnQuit;
                 @Quit.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnQuit;
                 @Quit.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnQuit;
+                @MousePoint.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMousePoint;
+                @MousePoint.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMousePoint;
+                @MousePoint.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMousePoint;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -1071,6 +1096,9 @@ public class @Input : IInputActionCollection, IDisposable
                 @Quit.started += instance.OnQuit;
                 @Quit.performed += instance.OnQuit;
                 @Quit.canceled += instance.OnQuit;
+                @MousePoint.started += instance.OnMousePoint;
+                @MousePoint.performed += instance.OnMousePoint;
+                @MousePoint.canceled += instance.OnMousePoint;
             }
         }
     }
@@ -1233,6 +1261,7 @@ public class @Input : IInputActionCollection, IDisposable
         void OnBrake(InputAction.CallbackContext context);
         void OnShip(InputAction.CallbackContext context);
         void OnQuit(InputAction.CallbackContext context);
+        void OnMousePoint(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

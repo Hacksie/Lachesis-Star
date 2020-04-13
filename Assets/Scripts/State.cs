@@ -30,8 +30,6 @@ namespace HackedDesign
             return started ? $"Last:{lastSaveDate}\nCredit:#{credits}" : "Empty Slot";
         }
 
-        
-
         public void Save(int slot)
         {
             Logger.Log("State", "Saving state");
@@ -88,11 +86,13 @@ namespace HackedDesign
     public class PlanetState
     {
         public string name;
+        public string description;
         public int size;
         public int landHue;
         public int waterHue;
         public int x;
         public int y;
+        public int reputation = 0;
     }
 
     [System.Serializable]
@@ -117,6 +117,8 @@ namespace HackedDesign
     {
         public string cargoType;
         public string cargoName;
+        public bool radProof;
+        public bool orgProof;
         public int count;
         public int maxCount = 5;
     }
@@ -133,6 +135,7 @@ namespace HackedDesign
         INTRO,
         CARGO,
         MAP,
+        MARKET,
         END
     }
 

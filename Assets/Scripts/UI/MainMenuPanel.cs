@@ -124,6 +124,13 @@ namespace HackedDesign
             Game.instance.menuState = MenuStateEnum.CREDITS;
         }
 
+        public void QuitClicked()
+        {
+            Logger.Log(name, "Quit Clicked");
+            Game.instance.menuState = MenuStateEnum.QUIT;
+            Game.instance.Quit();
+        }
+
         public void Slot0Clicked()
         {
             Logger.Log(name, "Slot 0 Clicked");
@@ -155,6 +162,13 @@ namespace HackedDesign
             Logger.Log(name, "Delete Slot Clicked ", selectedSlot.ToString());
             Game.instance.DeleteSaveGame(selectedSlot);
             UpdateSlots();
+        }
+
+        public void CreditsCloseClicked()
+        {
+            Logger.Log(name, "Credits Close");
+            Game.instance.menuState = MenuStateEnum.NONE;
+            UpdatePanels();
         }
     }
 }

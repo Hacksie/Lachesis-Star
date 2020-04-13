@@ -111,6 +111,7 @@ GameObject:
   - component: {fileID: 2272706804067636008}
   - component: {fileID: 3054365664199276930}
   - component: {fileID: 8903894387266004393}
+  - component: {fileID: 301966952954236359}
   m_Layer: 0
   m_Name: Ore
   m_TagString: Untagged
@@ -221,7 +222,19 @@ MonoBehaviour:
     x: 0
     y: 0
   palette: {fileID: 11400000, guid: 2be5f0e5e7db5ec46ae97ace9e52ddb6, type: 2}
-  pixelsPerUnit: 16
+--- !u!114 &301966952954236359
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2272706804067636006}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b0901c390d5a234f84c2ece07864ee8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 1
 --- !u!1 &2272706805245579151
 GameObject:
   m_ObjectHideFlags: 0

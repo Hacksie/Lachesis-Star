@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 namespace HackedDesign
 {
+    [RequireComponent(typeof(CanvasGroup))]
     public class CargoPanel : MonoBehaviour
     {
         private CanvasGroup canvasGroup = null;
@@ -23,27 +24,37 @@ namespace HackedDesign
         [Header("Cargo Frame")]
         [SerializeField] Text cargoHoldText = null;
         [SerializeField] Text cargoItemText = null;
-        [SerializeField] Image cargiItemImage = null;
+        [SerializeField] Image cargoItemImage = null;
         [SerializeField] Text cargoItemTypeText = null;
         [SerializeField] Text cargoMinPriceText = null;
         [SerializeField] Text cargoMaxPriceText = null;
+
+        [Header("Engine Frame")]
+        [SerializeField] Text engineText = null;
+        [SerializeField] Text engineNameText = null;
+        [SerializeField] Text engineImage = null;
+        [SerializeField] Text engineLevelText = null;
+        [SerializeField] Text engineFuelText = null;
+        [SerializeField] Text engineMaxThrust = null;
 
         // Start is called before the first frame update
         void Awake()
         {
             canvasGroup = GetComponent<CanvasGroup>();
-            if(shipData == null)
+            if (shipData == null)
             {
                 Logger.LogError(name, "shipData is null");
             }
-            if(oreGen == null)
+            if (oreGen == null)
             {
                 Logger.LogError(name, "oreGen is null");
             }
-            if(palette == null)
+            if (palette == null)
             {
                 Logger.LogError(name, "palette is null");
             }
+
+            UpdateShipSelected(0);
         }
 
         // Update is called once per frame
@@ -53,6 +64,7 @@ namespace HackedDesign
             {
                 canvasGroup.alpha = 1;
                 canvasGroup.interactable = true;
+                canvasGroup.blocksRaycasts = true;
                 UpdateCargoGroups();
                 UpdateCargoHolds();
             }
@@ -60,6 +72,7 @@ namespace HackedDesign
             {
                 canvasGroup.alpha = 0;
                 canvasGroup.interactable = false;
+                canvasGroup.blocksRaycasts = false;
             }
         }
 
@@ -72,13 +85,13 @@ namespace HackedDesign
 
         private void UpdateCargoHolds()
         {
-            for(int i=0; i< cargoImages.Count;i++)
+            for (int i = 0; i < cargoImages.Count; i++)
             {
                 CargoHold hold = Game.instance.state.shipState.cargoHold[i];
 
                 if (hold == null || hold.count == 0)
                 {
-                    UpdateCargoHoldEmpty(i, hold);
+                    UpdateCargoHoldEmpty(i);
                 }
                 else
                 {
@@ -100,14 +113,60 @@ namespace HackedDesign
             cargoTexts[holdIndex].text = ore.symbol;
         }
 
-        private void UpdateCargoHoldEmpty(int holdIndex, CargoHold hold)
+        private void UpdateCargoHoldEmpty(int holdIndex)
         {
             cargoImages[holdIndex].sprite = null;
             cargoImages[holdIndex].color = Color.black;
             cargoTexts[holdIndex].text = "-";
         }
 
-        private void UpdateShipSelected()
+        private void UpdateShipSelected(int selected)
+        {
+            selectedHold = selected;
+            if (selectedHold <=0 || selectedHold > Game.instance.state.shipState.cargoHold.Count)
+            {
+                UpdateShipSelectedEmpty();
+
+                return;
+            }
+            var cargoHold = Game.instance.state.shipState.cargoHold[selectedHold - 1];
+
+            
+            
+            switch (cargoHold.cargoType)
+            {
+                case "Ore":
+                    UpdateShipSelectedOre(cargoHold);
+                    break;
+                default:
+                    UpdateShipSelectedEmpty();
+                    break;
+            }
+        }
+
+        private void UpdateShipSelectedEmpty()
+        {
+            cargoHoldText.text = "Hold " + selectedHold + " ()";
+            cargoItemText.text = "";
+            cargoItemImage.sprite = null;
+            cargoItemImage.color = Color.black;
+            cargoItemTypeText.text = "Empty";
+            cargoMaxPriceText.text = "";
+            cargoMinPriceText.text = "";
+        }
+
+        private void UpdateShipSelectedOre(CargoHold hold)
+        {
+
+            var ore = oreGen.GetOre(hold.cargoName);
+            cargoHoldText.text = "Hold " + selectedHold + " (" + (hold.orgProof ? "+O" : "") + (hold.radProof ? " +R" : "") + ")";
+            cargoItemText.text = ore.name;
+            cargoItemImage.sprite = ore.cargoSprite;
+            cargoItemImage.color = palette.GetColor(ore.hue, ore.colorValue);
+            cargoItemTypeText.text = hold.cargoType;
+        }
+
+        private void UpdateEngineSelected(int selected)
         {
 
         }
@@ -117,97 +176,27 @@ namespace HackedDesign
             Game.instance.SetPlayStatePlay();
         }
 
-        public void Cargo1Clicked()
-        {
-            Logger.Log(name, "Cargo 1 Clicked");
-        }
-
-        public void Cargo2Clicked()
-        {
-            Logger.Log(name, "Cargo 2 Clicked");
-        }
-
-        public void Cargo3Clicked()
-        {
-            Logger.Log(name, "Cargo 3 Clicked");
-        }
-
-        public void Cargo4Clicked()
-        {
-            Logger.Log(name, "Cargo 4 Clicked");
-        }
-
-        public void Cargo5Clicked()
-        {
-            Logger.Log(name, "Cargo 5 Clicked");
-        }
-
-        public void Cargo6Clicked()
-        {
-            Logger.Log(name, "Cargo 6 Clicked");
-        }
-
-        public void Cargo7Clicked()
-        {
-            Logger.Log(name, "Cargo 7 Clicked");
-        }
-
-        public void Cargo8Clicked()
-        {
-            Logger.Log(name, "Cargo 8 Clicked");
-        }
-
-        public void Cargo9Clicked()
-        {
-            Logger.Log(name, "Cargo 9 Clicked");
-        }
-
-        public void Cargo10Clicked()
-        {
-            Logger.Log(name, "Cargo 10 Clicked");
-        }
-
-        public void Cargo11Clicked()
-        {
-            Logger.Log(name, "Cargo 11 Clicked");
-        }
-
-        public void Cargo12Clicked()
-        {
-            Logger.Log(name, "Cargo 12 Clicked");
-        }
-
-        public void Cargo13Clicked()
-        {
-            Logger.Log(name, "Cargo 13 Clicked");
-        }
-
-        public void Cargo14Clicked()
-        {
-            Logger.Log(name, "Cargo 14 Clicked");
-        }
-
-        public void Cargo15Clicked()
-        {
-            Logger.Log(name, "Cargo 15 Clicked");
-        }
-
-        public void Cargo16Clicked()
-        {
-            Logger.Log(name, "Cargo 16 Clicked");
-        }
+        public void Cargo1Clicked() => UpdateShipSelected(1);
+        public void Cargo2Clicked() => UpdateShipSelected(2);
+        public void Cargo3Clicked() => UpdateShipSelected(3);
+        public void Cargo4Clicked() => UpdateShipSelected(4);
+        public void Cargo5Clicked() => UpdateShipSelected(5);
+        public void Cargo6Clicked() => UpdateShipSelected(6);
+        public void Cargo7Clicked() => UpdateShipSelected(7);
+        public void Cargo8Clicked() => UpdateShipSelected(8);
+        public void Cargo9Clicked() => UpdateShipSelected(9);
+        public void Cargo10Clicked() => UpdateShipSelected(10);
+        public void Cargo11Clicked() => UpdateShipSelected(11);
+        public void Cargo12Clicked() => UpdateShipSelected(12);
+        public void Cargo13Clicked() => UpdateShipSelected(13);
+        public void Cargo14Clicked() => UpdateShipSelected(14);
+        public void Cargo15Clicked() => UpdateShipSelected(15);
+        public void Cargo16Clicked() => UpdateShipSelected(16);
 
 
-        public void Engine1Clicked()
-        {
-            Logger.Log(name, "Engine 1 Clicked");
-        }
+        public void Engine1Clicked() => UpdateEngineSelected(1);
+        public void Engine2Clicked() => UpdateEngineSelected(2);
 
-        public void Engine2Clicked()
-        {
-            Logger.Log(name, "Engine 2 Clicked");
-        }
 
-        
     }
 }

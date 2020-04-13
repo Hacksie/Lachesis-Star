@@ -21,10 +21,10 @@ namespace HackedDesign
         [SerializeField] GameObject planet128 = null;
 
         [Header("Settings")]
-        [SerializeField] int planetCount16 = 0;
-        [SerializeField] int planetCount32 = 0;
-        [SerializeField] int planetCount64 = 0;
-        [SerializeField] int planetCount128 = 0;
+        [SerializeField] public int planetCount16 = 0;
+        [SerializeField] public int planetCount32 = 0;
+        [SerializeField] public int planetCount64 = 0;
+        [SerializeField] public int planetCount128 = 0;
         [SerializeField] int oreCount = 0;
         
         void Awake()
@@ -83,7 +83,9 @@ namespace HackedDesign
 
         public PlanetState GenPlanet(int size) => new PlanetState()
         {
-            name = nameGen.GenerateName(),
+            name = nameGen.GetRandomName(),
+            description = nameGen.GetRandomDescription(),
+            reputation = 0,
             size = size,
             landHue = Random.Range(0, palette.hues),
             waterHue = Random.Range(0, palette.hues),

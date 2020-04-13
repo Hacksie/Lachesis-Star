@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3117211309626011188}
   - component: {fileID: 5918935991506499844}
   - component: {fileID: 9147645762030913054}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -110,7 +110,7 @@ GameObject:
   - component: {fileID: 8358607804672575348}
   - component: {fileID: 6187615102825531622}
   - component: {fileID: 8911861675742519292}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -176,7 +176,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Lachesis Black Hole
+  m_Text: Lachesis Blackhole
 --- !u!1 &8618631386739438032
 GameObject:
   m_ObjectHideFlags: 0
@@ -188,7 +188,8 @@ GameObject:
   - component: {fileID: 8618631386739438035}
   - component: {fileID: 8618631386739438034}
   - component: {fileID: 6819109935046190731}
-  m_Layer: 0
+  - component: {fileID: 7871404852717381355}
+  m_Layer: 8
   m_Name: Blackhole
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -277,3 +278,16 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 8
+--- !u!114 &7871404852717381355
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8618631386739438032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b0901c390d5a234f84c2ece07864ee8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 2

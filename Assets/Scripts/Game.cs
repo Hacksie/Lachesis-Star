@@ -13,47 +13,23 @@ namespace HackedDesign
         [SerializeField] public List<State> slots = new List<State>(3);
         [SerializeField] public int currentSlot = 0;
         [SerializeField] public State state = null;
-        [Header("Configurated Game Objects")]
+        [Header("Configurated GameObjects")]
         [SerializeField] public PlayerController player;
         [SerializeField] public Universe universe;
 
         public static Game instance;
 
-
+        [Header("Runtime GameObjects")]
+        [SerializeField] private Selectable selectedObject;
 
         public Game()
         {
             instance = this;
         }
 
-        // Start is called before the first frame update
-        void Start()
+        void Awake()
         {
-            
             LoadSlots();
-
-            /*
-
-            foreach (var f in slotFiles)
-            {
-                if (f.Contains("SaveFile0.json"))
-                {
-
-                }
-                if (f.Contains("SaveFile1.json"))
-                {
-
-                }
-                if (f.Contains("SaveFile2.json"))
-                {
-
-                }
-                Logger.Log(name, f);
-
-            }*/
-
-            //state = slots[currentSlot];
-            //state.gameState = GameStateEnum.PLAYING;
         }
 
         State LoadSaveFile(int slot)
@@ -146,6 +122,13 @@ namespace HackedDesign
             state.playingState = PlayStateEnum.MAP;
         }
 
+        public void SetPlayStateMarket()
+        {
+            SaveGame();
+            state.playingState = PlayStateEnum.MARKET;
+
+        }
+
         public void SetPlayStateCargo()
         {
             SaveGame();
@@ -186,6 +169,44 @@ namespace HackedDesign
             gameState = GameStateEnum.MAINMENU;
         }
 
+        public void Quit()
+        {
+            Logger.Log(name, "Quit");
+            Application.Quit();
+        }
+
+        //public void SetHoverPlanet(Planet planet)
+        //{
+        //    hoverPlanet = planet;
+        //}
+
+        public void SetSelectable(Selectable selectable)
+        {
+            
+            if(selectable == null && selectedObject != null)
+            {
+                selectedObject.Leave();
+            }
+            else if(selectable != null)
+            {
+                selectable.Hover();
+            }
+            selectedObject = selectable;
+        }
+
+        public void SelectSelectable()
+        {
+            if(selectedObject != null)
+            {
+                selectedObject.Select();
+            }
+        }
+
+        public Selectable GetSelectable()
+        {
+            return selectedObject;
+        }
+
         private void UpdateTime()
         {
             switch (gameState)
@@ -199,6 +220,7 @@ namespace HackedDesign
                         case PlayStateEnum.INTRO:
                         case PlayStateEnum.CARGO:
                         case PlayStateEnum.MAP:
+                        case PlayStateEnum.MARKET:
                         case PlayStateEnum.END:
                             Time.timeScale = 0;
                             break;

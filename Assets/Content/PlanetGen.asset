@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5a6d6cf64d2e678449000be05f51cf60, type: 3}
-  m_Name: PlanetNameGen
+  m_Name: PlanetGen
   m_EditorClassIdentifier: 
   prefixChance: 0
   suffixChance: 0
@@ -121,3 +121,8 @@ MonoBehaviour:
   - Maryam
   - Aluqa
   suffixes: []
+  descriptions:
+  - A barren desolate world
+  - A highly populated world
+  - The high winds that travel across the surface of this world have made colonization
+    difficult

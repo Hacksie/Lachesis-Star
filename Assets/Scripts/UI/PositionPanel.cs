@@ -37,7 +37,7 @@ namespace HackedDesign
         // Update is called once per frame
         void Update()
         {
-            if (Game.instance.gameState == GameStateEnum.PLAYING)
+            if (Game.instance.gameState == GameStateEnum.PLAYING && Game.instance.state.playingState == PlayStateEnum.PLAY)
             {
                 canvasGroup.alpha = 1;
                 canvasGroup.interactable = true;

@@ -20,8 +20,9 @@ namespace HackedDesign
     {
         Basic,
         Metallic,
+        Gas,
         Organic,
-        RadIso
+        Radio
     }
 }
 

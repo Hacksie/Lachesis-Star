@@ -12,8 +12,9 @@ namespace HackedDesign
         [SerializeField] private List<string> prefixes = null;
         [SerializeField] private List<string> stems = null;
         [SerializeField] private List<string> suffixes = null;
+        [SerializeField] private List<string> descriptions = null;
 
-        public string GenerateName()
+        public string GetRandomName()
         {
             string name = "";
             if(Random.value < prefixChance)
@@ -32,6 +33,11 @@ namespace HackedDesign
             }
 
             return name;
+        }
+
+        public string GetRandomDescription()
+        {
+            return descriptions[Random.Range(0, descriptions.Count)];
         }
     }
 }

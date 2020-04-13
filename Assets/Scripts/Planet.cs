@@ -35,6 +35,11 @@ namespace HackedDesign
             worldText.text = planetState.name;
         }
 
+        public void Interact()
+        {
+            Game.instance.SetPlayStateMarket();
+        }
+
         public void GenerateSprite()
         {
             Texture2D sprite = new Texture2D(planetState.size, planetState.size);
