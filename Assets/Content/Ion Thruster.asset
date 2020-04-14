@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Ion Thruster
   m_EditorClassIdentifier: 
   description: 
-  thrustRate: 1
+  thrustRate: 2
   fuelRate: 1

@@ -11,6 +11,7 @@ namespace HackedDesign
         [SerializeField] Text XText = null;
         [SerializeField] Text YText = null;
         [SerializeField] Text SpeedText = null;
+        [SerializeField] Text TimerText = null;
         [SerializeField] PlayerController player = null;
         
         void Awake()
@@ -55,6 +56,7 @@ namespace HackedDesign
             XText.text = $"{player.transform.position.x:N1}";
             YText.text = $"{player.transform.position.y:N1}";
             SpeedText.text = $"{player.currentThrust:N1} / {player.maxThrust:N1}";
+            TimerText.text = Game.instance.planetMarketTimerCountdown.ToString("N0");
         }
     }
 }

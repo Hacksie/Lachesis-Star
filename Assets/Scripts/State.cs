@@ -17,6 +17,10 @@ namespace HackedDesign
         public PlayerState playerState;
         public List<PlanetState> planets;
         public List<OreState> ores;
+        public List<QuestState> quests;
+        public PlanetItem selectedPlanetItem;
+        public CargoHold selectedCargoHold;
+        
 
         public State()
         {
@@ -73,6 +77,7 @@ namespace HackedDesign
             {
                 cargoHold.Add(new CargoHold()
                 {
+                    holdId = i + 1,
                     cargoType = "",
                     cargoName = "",
                     count = 0,
@@ -93,6 +98,16 @@ namespace HackedDesign
         public int x;
         public int y;
         public int reputation = 0;
+        public List<PlanetItem> items;
+    }
+
+    [System.Serializable]
+    public class PlanetItem
+    {
+        public string name;
+        public string type;
+        public int qty;
+        public int price;
     }
 
     [System.Serializable]
@@ -107,6 +122,14 @@ namespace HackedDesign
     }
 
     [System.Serializable]
+    public class QuestState
+    {
+        public int questId;
+        public float questStart;
+        public bool completed;
+    }
+
+    [System.Serializable]
     public class Engine
     {
         public string name;
@@ -115,6 +138,7 @@ namespace HackedDesign
     [System.Serializable]
     public class CargoHold
     {
+        public int holdId = 0;
         public string cargoType;
         public string cargoName;
         public bool radProof;

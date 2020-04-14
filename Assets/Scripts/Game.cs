@@ -16,11 +16,20 @@ namespace HackedDesign
         [Header("Configurated GameObjects")]
         [SerializeField] public PlayerController player;
         [SerializeField] public Universe universe;
+        [SerializeField] public OreGen oreGen;
 
         public static Game instance;
 
         [Header("Runtime GameObjects")]
         [SerializeField] private Selectable selectedObject;
+
+        [Header("Settings")]
+        [SerializeField] private int planetItemCount = 6;
+        [SerializeField] private int marketOreCount = 10;
+        [SerializeField] private int marketUpgradeCount = 10;
+
+        [SerializeField] private float planetMarketTimer = 60.0f;
+        [SerializeField] public float planetMarketTimerCountdown = 0.0f;
 
         public Game()
         {
@@ -54,6 +63,40 @@ namespace HackedDesign
         void Update()
         {
             UpdateTime();
+            UpdateMarketTimer();
+        }
+
+        private void UpdateMarketTimer()
+        {
+            if (gameState == GameStateEnum.PLAYING)
+            {
+                planetMarketTimerCountdown += Time.deltaTime;
+            }
+
+            if (planetMarketTimerCountdown >= planetMarketTimer)
+            {
+                planetMarketTimerCountdown = 0;
+                // Update market prices
+                UpdateMarketPrices();
+            }
+        }
+
+        private void UpdateMarketPrices()
+        {
+            for (int i = 0; i < state.planets.Count; i++)
+            {
+                state.planets[i].items = new List<PlanetItem>(oreGen.ores.Count);
+                for (int j = 0; j < oreGen.ores.Count; j++)
+                {
+                    state.planets[i].items.Add(new PlanetItem()
+                    {
+                        type = "Ore",
+                        name = oreGen.ores[j].name,
+                        price = Random.Range(oreGen.ores[j].minPrice, oreGen.ores[j].maxPrice + 1),
+                        qty = Random.value > 0.5 ? Random.Range(0, oreGen.ores[j].maxSellQty) : 0,
+                    });
+                }
+            }
         }
 
         public void LoadSlots()
@@ -98,10 +141,11 @@ namespace HackedDesign
             state = slots[currentSlot] = new State();
             state.planets = universe.GenerateNewPlanets();
             state.ores = universe.GenerateNewOres();
-            
-            
+
+
             universe.SpawnPlanets(state.planets);
             universe.SpawnOres(state.ores);
+            UpdateMarketPrices();
             state.started = true;
         }
 
@@ -182,12 +226,12 @@ namespace HackedDesign
 
         public void SetSelectable(Selectable selectable)
         {
-            
-            if(selectable == null && selectedObject != null)
+
+            if (selectable == null && selectedObject != null)
             {
                 selectedObject.Leave();
             }
-            else if(selectable != null)
+            else if (selectable != null)
             {
                 selectable.Hover();
             }
@@ -196,7 +240,7 @@ namespace HackedDesign
 
         public void SelectSelectable()
         {
-            if(selectedObject != null)
+            if (selectedObject != null)
             {
                 selectedObject.Select();
             }

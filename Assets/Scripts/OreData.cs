@@ -12,7 +12,7 @@ namespace HackedDesign
         public int colorValue;
         public int minPrice;
         public int maxPrice;
-        public float rarity;
+        public int maxSellQty;
         public Sprite cargoSprite;
     }
 

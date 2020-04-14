@@ -17,7 +17,6 @@ namespace HackedDesign
         [SerializeField] GameObject cargoGroup2 = null;
         [SerializeField] List<Image> cargoImages = null;
         [SerializeField] List<Text> cargoTexts = null;
-        [SerializeField] int selectedHold = 0;
         [SerializeField] int selectedEngine = 0;
 
 
@@ -36,6 +35,8 @@ namespace HackedDesign
         [SerializeField] Text engineLevelText = null;
         [SerializeField] Text engineFuelText = null;
         [SerializeField] Text engineMaxThrust = null;
+
+        bool dirty = true;
 
         // Start is called before the first frame update
         void Awake()
@@ -62,14 +63,19 @@ namespace HackedDesign
         {
             if (Game.instance.gameState == GameStateEnum.PLAYING && Game.instance.state.playingState == PlayStateEnum.CARGO)
             {
-                canvasGroup.alpha = 1;
-                canvasGroup.interactable = true;
-                canvasGroup.blocksRaycasts = true;
-                UpdateCargoGroups();
-                UpdateCargoHolds();
+                if (dirty)
+                {
+                    canvasGroup.alpha = 1;
+                    canvasGroup.interactable = true;
+                    canvasGroup.blocksRaycasts = true;
+                    UpdateCargoGroups();
+                    UpdateCargoHolds();
+                    dirty = false;
+                }
             }
             else
             {
+                dirty = true;
                 canvasGroup.alpha = 0;
                 canvasGroup.interactable = false;
                 canvasGroup.blocksRaycasts = false;
@@ -122,21 +128,23 @@ namespace HackedDesign
 
         private void UpdateShipSelected(int selected)
         {
-            selectedHold = selected;
-            if (selectedHold <=0 || selectedHold > Game.instance.state.shipState.cargoHold.Count)
+
+            //Game.instance.state.selectedCargoHold = selected;
+            
+            //selectedHold = selected;
+            if (selected <= 0 || selected > Game.instance.state.shipState.cargoHold.Count)
             {
                 UpdateShipSelectedEmpty();
 
                 return;
             }
-            var cargoHold = Game.instance.state.shipState.cargoHold[selectedHold - 1];
 
+            Game.instance.state.selectedCargoHold = Game.instance.state.shipState.cargoHold[selected - 1]; 
             
-            
-            switch (cargoHold.cargoType)
+            switch (Game.instance.state.selectedCargoHold.cargoType)
             {
                 case "Ore":
-                    UpdateShipSelectedOre(cargoHold);
+                    UpdateShipSelectedOre(Game.instance.state.selectedCargoHold);
                     break;
                 default:
                     UpdateShipSelectedEmpty();
@@ -146,7 +154,7 @@ namespace HackedDesign
 
         private void UpdateShipSelectedEmpty()
         {
-            cargoHoldText.text = "Hold " + selectedHold + " ()";
+            cargoHoldText.text = "Hold " + Game.instance.state.selectedCargoHold == null ? "" : Game.instance.state.selectedCargoHold.holdId + " ()";
             cargoItemText.text = "";
             cargoItemImage.sprite = null;
             cargoItemImage.color = Color.black;
@@ -159,7 +167,7 @@ namespace HackedDesign
         {
 
             var ore = oreGen.GetOre(hold.cargoName);
-            cargoHoldText.text = "Hold " + selectedHold + " (" + (hold.orgProof ? "+O" : "") + (hold.radProof ? " +R" : "") + ")";
+            cargoHoldText.text = "Hold " + hold.holdId + " (" + (hold.orgProof ? "+O" : "") + (hold.radProof ? " +R" : "") + ")";
             cargoItemText.text = ore.name;
             cargoItemImage.sprite = ore.cargoSprite;
             cargoItemImage.color = palette.GetColor(ore.hue, ore.colorValue);
@@ -192,7 +200,6 @@ namespace HackedDesign
         public void Cargo14Clicked() => UpdateShipSelected(14);
         public void Cargo15Clicked() => UpdateShipSelected(15);
         public void Cargo16Clicked() => UpdateShipSelected(16);
-
 
         public void Engine1Clicked() => UpdateEngineSelected(1);
         public void Engine2Clicked() => UpdateEngineSelected(2);

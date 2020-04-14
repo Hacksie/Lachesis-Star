@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: Bariore
   m_EditorClassIdentifier: 
   symbol: Bax
+  oreType: 0
   hue: 1
   colorValue: 1
-  minPrice: 0
-  maxPrice: 0
-  rarity: 0
+  minPrice: 33
+  maxPrice: 100
+  maxSellQty: 22
   cargoSprite: {fileID: 21300000, guid: 8fc39aec61385f942a4948402f5fef12, type: 3}
