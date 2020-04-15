@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using System.Linq;
 
 namespace HackedDesign
 {
@@ -28,7 +29,7 @@ namespace HackedDesign
         [SerializeField] private int marketOreCount = 10;
         [SerializeField] private int marketUpgradeCount = 10;
 
-        [SerializeField] private float planetMarketTimer = 60.0f;
+        [SerializeField] private float solMarketTimer = 60.0f;
         [SerializeField] public float planetMarketTimerCountdown = 0.0f;
 
         public Game()
@@ -70,14 +71,18 @@ namespace HackedDesign
         {
             if (gameState == GameStateEnum.PLAYING)
             {
+                state.solTimer += Time.deltaTime;
                 planetMarketTimerCountdown += Time.deltaTime;
             }
 
-            if (planetMarketTimerCountdown >= planetMarketTimer)
+            if (planetMarketTimerCountdown >= solMarketTimer)
             {
+                state.solTimer = 0;
+                state.sol++;
                 planetMarketTimerCountdown = 0;
                 // Update market prices
                 UpdateMarketPrices();
+                universe.UpdateOres();
             }
         }
 
@@ -134,7 +139,87 @@ namespace HackedDesign
             SaveGame();
         }
 
+        public bool SellCargoItem(Planet planet)
+        {
+            var hold = state.selectedCargoHold;
 
+            if (hold.count <= 0)
+                return false;
+
+            Logger.Log(name, "Finding planet item price", hold.cargoName, hold.cargoType);
+
+            var item = planet.planetState.items.First(i => i.name == hold.cargoName && i.type == hold.cargoType);
+
+            if(item == null)
+                return false;
+
+            var credits = item.price;
+
+            state.credits += credits;
+            hold.count--;
+            item.qty++;
+
+            if(hold.count ==0)
+            {
+                hold.cargoType = "";
+                hold.cargoName = "";
+            }
+
+
+            return true;
+        }
+
+        public bool BuySelectedItem()
+        {
+            var item = state.selectedPlanetItem;
+
+            if (item.qty <= 0)
+                return false;
+
+            if (state.credits < item.price)
+                return false;
+
+            state.credits -= item.price;
+            item.qty--;
+
+            switch (item.type)
+            {
+                case "Ore":
+                    AddOre(item.name, 1);
+                    break;
+            }
+
+            return false;
+        }
+
+
+
+        // Probably should have its own class
+        public void AddOre(string name, int count)
+        {
+            Logger.Log(this.name, "Add Ore", name, count.ToString());
+
+            for (int i = 0; i < state.shipState.cargoHold.Count; i++)
+            {
+                if (count <= 0)
+                    break;
+
+                CargoHold hold = state.shipState.cargoHold.FirstOrDefault(h => h.cargoType == "Ore" && h.cargoName == name && h.count < h.maxCount);
+
+                if (hold == null)
+                {
+                    Logger.Log(name, "no existing hold found");
+                    hold = state.shipState.cargoHold.FirstOrDefault(h => h.cargoType == "");
+                    hold.cargoType = "Ore";
+                    hold.cargoName = name;
+
+                }
+
+                int total = Mathf.Min(count, hold.maxCount - hold.count);
+                hold.count += total;
+                count -= total;
+            }
+        }
 
         public void NewGame()
         {

@@ -24,14 +24,16 @@ namespace HackedDesign
         [SerializeField] GameObject cargoGroup0 = null;
         [SerializeField] GameObject cargoGroup1 = null;
         [SerializeField] GameObject cargoGroup2 = null;
-        [SerializeField] List<Image> cargoImages = null;
-        [SerializeField] List<Text> cargoTexts = null;
+        [SerializeField] List<CargoItem> cargoItems = null;
         [SerializeField] int selectedEngine = 0;
+
+        private GameObject selectedGameObject;
 
         [Header("Prefabs")]
         [SerializeField] private GameObject itemPrefab;
 
         private int selectedItem = 0;
+        private Planet currentPlanet;
 
         private bool dirty = true;
 
@@ -70,32 +72,40 @@ namespace HackedDesign
         public void UpdatePanel()
         {
 
-            creditsText.text = "#" + Game.instance.state.credits.ToString();
+            creditsText.text = "$" + Game.instance.state.credits.ToString();
             Selectable s = Game.instance.GetSelectable();
             if (s.type != SelectableType.Planet)
             {
                 Logger.LogError(name, "Cannot open a market with non planet");
                 return;
             }
-            var p = s.planet;
+            currentPlanet = s.planet;
 
-            if (p == null)
+            if (currentPlanet == null)
             {
                 Logger.LogError(name, "Selectable of type planet has null planet");
                 return;
             }
 
-            title.text = p.planetState.name + " Trading Market";
-            repText.text = p.planetState.reputation.ToString();
+            title.text = currentPlanet.planetState.name + " Trading Market";
+            repText.text = currentPlanet.planetState.reputation.ToString();
             //description.text = p.planetState.description;
-            UpdateItems(p);
+            UpdateItems(currentPlanet);
         }
 
         void UpdateItems(Planet planet)
         {
             Logger.Log(name, "items count", planet.planetState.items.Count.ToString());
 
-            foreach (var planetItem in planet.planetState.items.Where(e => e.qty > 0))
+            //Delete children
+
+            for(int i=0; i< itemParent.transform.childCount;i++)
+            {
+                Destroy(itemParent.transform.GetChild(i).gameObject);
+            }
+
+
+            foreach (var planetItem in planet.planetState.items)
             {
                 var item = Instantiate(itemPrefab, itemParent.transform);
                 var marketItem = item.GetComponent<MarketItem>();
@@ -114,50 +124,29 @@ namespace HackedDesign
 
         private void UpdateCargoHolds()
         {
-            for (int i = 0; i < cargoImages.Count; i++)
+            for (int i = 0; i < cargoItems.Count; i++)
             {
                 CargoHold hold = Game.instance.state.shipState.cargoHold[i];
-
-                if (hold == null || hold.count == 0)
-                {
-                    UpdateCargoHoldEmpty(i);
-                }
-                else
-                {
-                    switch (hold.cargoType)
-                    {
-                        case "Ore":
-                            UpdateCargoHoldOre(i, hold);
-                            break;
-                    }
-                }
+                //cargoItems[i].cargoHold = hold;
+                cargoItems[i].UpdatePanel(hold);
             }
-        }
-
-        private void UpdateCargoHoldOre(int holdIndex, CargoHold hold)
-        {
-            var ore = oreGen.GetOre(hold.cargoName);
-            cargoImages[holdIndex].sprite = ore.cargoSprite;
-            cargoImages[holdIndex].color = palette.GetColor(ore.hue, ore.colorValue);
-            cargoTexts[holdIndex].text = ore.symbol;
-        }
-
-        private void UpdateCargoHoldEmpty(int holdIndex)
-        {
-            cargoImages[holdIndex].sprite = null;
-            cargoImages[holdIndex].color = Color.black;
-            cargoTexts[holdIndex].text = "-";
         }
 
         public void BuyClicked()
         {
             Logger.Log(name, "Buy", Game.instance.state.selectedPlanetItem.name);
+            Game.instance.BuySelectedItem();
+            dirty = true;
             //Game.instance.state.selectedPlanetItem = planetItem;
         }
 
+        
+
         public void SellClicked()
         {
-
+            Logger.Log(name, "Sell");
+            Game.instance.SellCargoItem(currentPlanet);
+            dirty = true;
         }
 
         public void CloseClicked()

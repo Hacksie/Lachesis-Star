@@ -20,6 +20,9 @@ namespace HackedDesign
         public List<QuestState> quests;
         public PlanetItem selectedPlanetItem;
         public CargoHold selectedCargoHold;
+        public int sol;
+        public float solTimer;
+
         
 
         public State()
@@ -27,11 +30,12 @@ namespace HackedDesign
             startDate = System.DateTime.Now.ToString("s", System.Globalization.CultureInfo.InvariantCulture);
             shipState = new ShipState();
             playerState = new PlayerState();
+            sol = 0;
         }
 
         public string GetDescription()
         {
-            return started ? $"Last:{lastSaveDate}\nCredit:#{credits}" : "Empty Slot";
+            return started ? $"Last:{lastSaveDate}\nCredit:${credits}" : "Empty Slot";
         }
 
         public void Save(int slot)
@@ -115,10 +119,12 @@ namespace HackedDesign
     {
         public string name;
         public int hue;
+        public int count;
         public int colorValue;
         public int size;
         public int x;
         public int y;
+        public bool touched = false;
     }
 
     [System.Serializable]

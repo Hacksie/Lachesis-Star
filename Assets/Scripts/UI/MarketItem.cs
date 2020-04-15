@@ -10,6 +10,8 @@ namespace HackedDesign
     {
         public PlanetItem planetItem;
         [Header("Configured Game Objects")]
+        [SerializeField] private Image frame;
+        [SerializeField] private Color selectedColor;
         [SerializeField] private Text nameText;
         [SerializeField] private Text qtyText;
         [SerializeField] private Text priceText;
@@ -34,6 +36,18 @@ namespace HackedDesign
             }
         }
 
+        public void Update()
+        {
+            if(Game.instance.state.selectedPlanetItem == planetItem)
+            {
+                frame.color = selectedColor;
+            }
+            else
+            {
+                frame.color = Color.white;
+            }
+        }
+
         public void UpdatePanel(PlanetItem planetItem)
         {
             if(planetItem.qty == 0)
@@ -47,8 +61,8 @@ namespace HackedDesign
 
             this.planetItem = planetItem;
             nameText.text = planetItem.name;
-            qtyText.text = planetItem.qty.ToString(); ;
-            priceText.text = "#" + planetItem.price;
+            qtyText.text = planetItem.qty.ToString();
+            priceText.text = "$" + planetItem.price;
         }
     }
 }

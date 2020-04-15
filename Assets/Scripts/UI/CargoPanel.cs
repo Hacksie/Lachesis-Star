@@ -17,6 +17,7 @@ namespace HackedDesign
         [SerializeField] GameObject cargoGroup2 = null;
         [SerializeField] List<Image> cargoImages = null;
         [SerializeField] List<Text> cargoTexts = null;
+        [SerializeField] List<CargoItem> cargoItems = null;
         [SerializeField] int selectedEngine = 0;
 
 
@@ -55,7 +56,7 @@ namespace HackedDesign
                 Logger.LogError(name, "palette is null");
             }
 
-            UpdateShipSelected(0);
+            UpdateShipSelected();
         }
 
         // Update is called once per frame
@@ -72,6 +73,8 @@ namespace HackedDesign
                     UpdateCargoHolds();
                     dirty = false;
                 }
+
+                UpdateShipSelected();
             }
             else
             {
@@ -91,55 +94,24 @@ namespace HackedDesign
 
         private void UpdateCargoHolds()
         {
-            for (int i = 0; i < cargoImages.Count; i++)
+            for (int i = 0; i < cargoItems.Count; i++)
             {
                 CargoHold hold = Game.instance.state.shipState.cargoHold[i];
-
-                if (hold == null || hold.count == 0)
-                {
-                    UpdateCargoHoldEmpty(i);
-                }
-                else
-                {
-                    switch (hold.cargoType)
-                    {
-                        case "Ore":
-                            UpdateCargoHoldOre(i, hold);
-                            break;
-                    }
-                }
+                //cargoItems[i].cargoHold = hold;
+                cargoItems[i].UpdatePanel(hold);
             }
         }
 
-        private void UpdateCargoHoldOre(int holdIndex, CargoHold hold)
+        private void UpdateShipSelected()
         {
-            var ore = oreGen.GetOre(hold.cargoName);
-            cargoImages[holdIndex].sprite = ore.cargoSprite;
-            cargoImages[holdIndex].color = palette.GetColor(ore.hue, ore.colorValue);
-            cargoTexts[holdIndex].text = ore.symbol;
-        }
-
-        private void UpdateCargoHoldEmpty(int holdIndex)
-        {
-            cargoImages[holdIndex].sprite = null;
-            cargoImages[holdIndex].color = Color.black;
-            cargoTexts[holdIndex].text = "-";
-        }
-
-        private void UpdateShipSelected(int selected)
-        {
-
-            //Game.instance.state.selectedCargoHold = selected;
-            
-            //selectedHold = selected;
-            if (selected <= 0 || selected > Game.instance.state.shipState.cargoHold.Count)
+            if (Game.instance.state.selectedCargoHold == null)
             {
                 UpdateShipSelectedEmpty();
 
                 return;
             }
 
-            Game.instance.state.selectedCargoHold = Game.instance.state.shipState.cargoHold[selected - 1]; 
+            //Game.instance.state.selectedCargoHold = Game.instance.state.shipState.cargoHold[selected - 1]; 
             
             switch (Game.instance.state.selectedCargoHold.cargoType)
             {
@@ -154,7 +126,7 @@ namespace HackedDesign
 
         private void UpdateShipSelectedEmpty()
         {
-            cargoHoldText.text = "Hold " + Game.instance.state.selectedCargoHold == null ? "" : Game.instance.state.selectedCargoHold.holdId + " ()";
+            cargoHoldText.text = "Hold " + (Game.instance.state.selectedCargoHold == null ? "" : Game.instance.state.selectedCargoHold.holdId.ToString()) + " ()";
             cargoItemText.text = "";
             cargoItemImage.sprite = null;
             cargoItemImage.color = Color.black;
@@ -183,23 +155,6 @@ namespace HackedDesign
         {
             Game.instance.SetPlayStatePlay();
         }
-
-        public void Cargo1Clicked() => UpdateShipSelected(1);
-        public void Cargo2Clicked() => UpdateShipSelected(2);
-        public void Cargo3Clicked() => UpdateShipSelected(3);
-        public void Cargo4Clicked() => UpdateShipSelected(4);
-        public void Cargo5Clicked() => UpdateShipSelected(5);
-        public void Cargo6Clicked() => UpdateShipSelected(6);
-        public void Cargo7Clicked() => UpdateShipSelected(7);
-        public void Cargo8Clicked() => UpdateShipSelected(8);
-        public void Cargo9Clicked() => UpdateShipSelected(9);
-        public void Cargo10Clicked() => UpdateShipSelected(10);
-        public void Cargo11Clicked() => UpdateShipSelected(11);
-        public void Cargo12Clicked() => UpdateShipSelected(12);
-        public void Cargo13Clicked() => UpdateShipSelected(13);
-        public void Cargo14Clicked() => UpdateShipSelected(14);
-        public void Cargo15Clicked() => UpdateShipSelected(15);
-        public void Cargo16Clicked() => UpdateShipSelected(16);
 
         public void Engine1Clicked() => UpdateEngineSelected(1);
         public void Engine2Clicked() => UpdateEngineSelected(2);

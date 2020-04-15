@@ -14,6 +14,7 @@ namespace HackedDesign
         public int maxPrice;
         public int maxSellQty;
         public Sprite cargoSprite;
+        public int decayRate;
     }
 
     public enum OreType

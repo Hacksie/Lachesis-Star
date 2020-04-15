@@ -32,6 +32,33 @@ namespace HackedDesign
             //SpawnPlanets();
         }
 
+        void Update()
+        {
+
+        }
+
+        public void UpdateOres()
+        {
+            for(int i =0; i<Game.instance.state.ores.Count;i++)
+            {
+                if(Game.instance.state.ores[i].touched)
+                {
+                    Logger.Log(name, "respawning ore");
+                    var ore = oreGen.GetRandomOre();
+
+                    Game.instance.state.ores[i].name = ore.name;
+                    Game.instance.state.ores[i].hue = ore.hue;
+                    Game.instance.state.ores[i].colorValue = ore.colorValue;
+                    Game.instance.state.ores[i].size = 8;
+                    Game.instance.state.ores[i].count = Random.Range(1, 3);
+                    Game.instance.state.ores[i].x = Mathf.RoundToInt(Random.Range(rect.xMin, rect.xMax));
+                    Game.instance.state.ores[i].y = Mathf.RoundToInt(Random.Range(rect.yMin, rect.yMax));
+                    Game.instance.state.ores[i].touched = false;
+
+                }
+            }
+        }
+
         public List<OreState> GenerateNewOres()
         {
             var ores = new List<OreState>();
@@ -46,6 +73,7 @@ namespace HackedDesign
                     hue = ore.hue,
                     colorValue = ore.colorValue,
                     size = 8,
+                    count = Random.Range(1, 3),
                     x = Mathf.RoundToInt(Random.Range(rect.xMin, rect.xMax)),
                     y = Mathf.RoundToInt(Random.Range(rect.yMin, rect.yMax))
                 });
@@ -134,8 +162,6 @@ namespace HackedDesign
             gameObject.name = state.name;
             Ore o = gameObject.GetComponent<Ore>();
             o.oreState = state;
-            o.UpdateSprite();
-            
         }
 
         public void SpawnOres(List<OreState> ores)
