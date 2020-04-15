@@ -15,8 +15,11 @@ MonoBehaviour:
   ores:
   - {fileID: 11400000, guid: 5e87e779bb8b35542a06b37645e05757, type: 2}
   - {fileID: 11400000, guid: a4986761d43199b4f91d559f657cf303, type: 2}
+  - {fileID: 11400000, guid: 77915ba6d7923614e8251c39d200c7d5, type: 2}
   - {fileID: 11400000, guid: 5fa55acce6b389d45ac71de0cf632d62, type: 2}
   - {fileID: 11400000, guid: 627a2c79c731c5e4184217a35f9de53f, type: 2}
   - {fileID: 11400000, guid: f805fe3a0b0737e44a71a5d621310b24, type: 2}
   - {fileID: 11400000, guid: 63e25af1a56fd2342b7a3f229054e555, type: 2}
+  - {fileID: 11400000, guid: 910dcf3aa22ae3b4faff3fcc5b202c70, type: 2}
   - {fileID: 11400000, guid: ab5ae7284f8b7f14d9fe933362b50d95, type: 2}
+  - {fileID: 11400000, guid: 18f9d84ea1405b246a43e8bf813483fc, type: 2}

@@ -17,7 +17,6 @@ namespace HackedDesign
         public PlayerState playerState;
         public List<PlanetState> planets;
         public List<OreState> ores;
-        public List<QuestState> quests;
         public PlanetItem selectedPlanetItem;
         public CargoHold selectedCargoHold;
         public int sol;
@@ -128,14 +127,6 @@ namespace HackedDesign
     }
 
     [System.Serializable]
-    public class QuestState
-    {
-        public int questId;
-        public float questStart;
-        public bool completed;
-    }
-
-    [System.Serializable]
     public class Engine
     {
         public string name;
@@ -151,6 +142,7 @@ namespace HackedDesign
         public bool orgProof;
         public int count;
         public int maxCount = 5;
+        public List<int> solTimer;
     }
 
     public enum GameStateEnum

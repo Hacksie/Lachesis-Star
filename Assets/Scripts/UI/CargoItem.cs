@@ -17,13 +17,6 @@ namespace HackedDesign
         [SerializeField] private Text qty;
         [SerializeField] private Color selectedColor;
 
-        // Start is called before the first frame update
-        void Start()
-        {
-
-        }
-
-        // Update is called once per frame
         void Update()
         {
             if (Game.instance.state.selectedCargoHold == cargoHold)
@@ -63,22 +56,6 @@ namespace HackedDesign
                     UpdateCargooHoldEmpty();
                     break;
             }
-
-
-            /*
-            if (planetItem.qty == 0)
-            {
-                button.interactable = false;
-            }
-            else
-            {
-                button.interactable = true;
-            }
-
-            this.planetItem = planetItem;
-            nameText.text = planetItem.name;
-            qtyText.text = planetItem.qty.ToString(); ;
-            priceText.text = "#" + planetItem.price;*/
         }
 
         private void UpdateCargoHoldOre()

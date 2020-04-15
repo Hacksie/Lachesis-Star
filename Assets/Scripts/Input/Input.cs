@@ -73,6 +73,14 @@ public class @Input : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Map"",
+                    ""type"": ""Button"",
+                    ""id"": ""0172282e-81a3-46ec-8886-03617bb13d73"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -127,6 +135,17 @@ public class @Input : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""XR"",
+                    ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""21c724cb-74aa-4c4e-ae30-c205ec53a73a"",
+                    ""path"": ""<XInputController>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
                     ""action"": ""Interact"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -381,6 +400,28 @@ public class @Input : IInputActionCollection, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""MousePoint"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""daa0f909-5035-4720-bde3-0f27d95d5a56"",
+                    ""path"": ""<XInputController>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Map"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""56aacd68-2c47-4511-8726-2ca335de9e07"",
+                    ""path"": ""<Keyboard>/m"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Map"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -965,6 +1006,7 @@ public class @Input : IInputActionCollection, IDisposable
         m_Player_Ship = m_Player.FindAction("Ship", throwIfNotFound: true);
         m_Player_Quit = m_Player.FindAction("Quit", throwIfNotFound: true);
         m_Player_MousePoint = m_Player.FindAction("MousePoint", throwIfNotFound: true);
+        m_Player_Map = m_Player.FindAction("Map", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1033,6 +1075,7 @@ public class @Input : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_Ship;
     private readonly InputAction m_Player_Quit;
     private readonly InputAction m_Player_MousePoint;
+    private readonly InputAction m_Player_Map;
     public struct PlayerActions
     {
         private @Input m_Wrapper;
@@ -1044,6 +1087,7 @@ public class @Input : IInputActionCollection, IDisposable
         public InputAction @Ship => m_Wrapper.m_Player_Ship;
         public InputAction @Quit => m_Wrapper.m_Player_Quit;
         public InputAction @MousePoint => m_Wrapper.m_Player_MousePoint;
+        public InputAction @Map => m_Wrapper.m_Player_Map;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1074,6 +1118,9 @@ public class @Input : IInputActionCollection, IDisposable
                 @MousePoint.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMousePoint;
                 @MousePoint.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMousePoint;
                 @MousePoint.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMousePoint;
+                @Map.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMap;
+                @Map.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMap;
+                @Map.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMap;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -1099,6 +1146,9 @@ public class @Input : IInputActionCollection, IDisposable
                 @MousePoint.started += instance.OnMousePoint;
                 @MousePoint.performed += instance.OnMousePoint;
                 @MousePoint.canceled += instance.OnMousePoint;
+                @Map.started += instance.OnMap;
+                @Map.performed += instance.OnMap;
+                @Map.canceled += instance.OnMap;
             }
         }
     }
@@ -1262,6 +1312,7 @@ public class @Input : IInputActionCollection, IDisposable
         void OnShip(InputAction.CallbackContext context);
         void OnQuit(InputAction.CallbackContext context);
         void OnMousePoint(InputAction.CallbackContext context);
+        void OnMap(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

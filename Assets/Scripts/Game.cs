@@ -82,8 +82,14 @@ namespace HackedDesign
                 planetMarketTimerCountdown = 0;
                 // Update market prices
                 UpdateMarketPrices();
+                UpdateDecay();
                 universe.UpdateOres();
             }
+        }
+
+        private void UpdateDecay()
+        {
+
         }
 
         private void UpdateMarketPrices()
@@ -129,11 +135,13 @@ namespace HackedDesign
             if (slots[currentSlot] == null || !slots[currentSlot].started)
             {
                 NewGame();
+                state.playingState = PlayStateEnum.INTRO;
             }
             else
             {
                 state = slots[currentSlot];
                 LoadGame();
+                state.playingState = PlayStateEnum.PLAY;
             }
 
             SaveGame();
@@ -156,6 +164,7 @@ namespace HackedDesign
             var credits = item.price;
 
             state.credits += credits;
+            hold.solTimer.RemoveAt(0);
             hold.count--;
             item.qty++;
 
@@ -212,10 +221,14 @@ namespace HackedDesign
                     hold = state.shipState.cargoHold.FirstOrDefault(h => h.cargoType == "");
                     hold.cargoType = "Ore";
                     hold.cargoName = name;
-
+                    
                 }
 
                 int total = Mathf.Min(count, hold.maxCount - hold.count);
+                for(int j = 0;j< count; j++)
+                {
+                    hold.solTimer.Add(state.sol);
+                }
                 hold.count += total;
                 count -= total;
             }

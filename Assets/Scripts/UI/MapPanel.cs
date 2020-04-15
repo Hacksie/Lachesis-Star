@@ -8,7 +8,7 @@ namespace HackedDesign
     [RequireComponent(typeof(CanvasGroup))]
     public class MapPanel : MonoBehaviour
     {
-        private CanvasGroup canvasGroup = null;
+        
         [SerializeField] private Universe universe;
 
         [SerializeField] private GameObject pixelPrefab;
@@ -19,8 +19,8 @@ namespace HackedDesign
         private List<GameObject> pool = new List<GameObject>();
 
         private bool dirty = true;
+        private CanvasGroup canvasGroup = null;
 
-        // Start is called before the first frame update
         void Awake()
         {
             canvasGroup = GetComponent<CanvasGroup>();
