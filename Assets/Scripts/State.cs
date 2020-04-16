@@ -84,7 +84,8 @@ namespace HackedDesign
                     cargoType = "",
                     cargoName = "",
                     count = 0,
-                    maxCount = 5
+                    maxCount = 5,
+                    solTimer = new List<int>()
                 });
             }
         }

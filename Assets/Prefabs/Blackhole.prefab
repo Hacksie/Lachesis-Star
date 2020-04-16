@@ -176,7 +176,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Lachesis Blackhole
+  m_Text: Lachesis Black Hole
 --- !u!1 &8618631386739438032
 GameObject:
   m_ObjectHideFlags: 0
@@ -291,3 +291,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 2
+  selectEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  hoverIndicator: {fileID: 0}
+  planet: {fileID: 0}
+  ore: {fileID: 0}

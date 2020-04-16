@@ -4466,7 +4466,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Infinite Star Blues
+  m_Text: Infinity Star Blues
 --- !u!222 &388104352
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -5549,7 +5549,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4184809871243767331, guid: 4b77262cfcf0cb148aff1cc0ddba7afb, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4b77262cfcf0cb148aff1cc0ddba7afb, type: 3}
@@ -15334,7 +15334,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4184809871243767331, guid: 4b77262cfcf0cb148aff1cc0ddba7afb, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4b77262cfcf0cb148aff1cc0ddba7afb, type: 3}

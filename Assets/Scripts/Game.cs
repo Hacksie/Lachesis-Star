@@ -87,28 +87,7 @@ namespace HackedDesign
             }
         }
 
-        private void UpdateDecay()
-        {
 
-        }
-
-        private void UpdateMarketPrices()
-        {
-            for (int i = 0; i < state.planets.Count; i++)
-            {
-                state.planets[i].items = new List<PlanetItem>(oreGen.ores.Count);
-                for (int j = 0; j < oreGen.ores.Count; j++)
-                {
-                    state.planets[i].items.Add(new PlanetItem()
-                    {
-                        type = "Ore",
-                        name = oreGen.ores[j].name,
-                        price = Random.Range(oreGen.ores[j].minPrice, oreGen.ores[j].maxPrice + 1),
-                        qty = Random.value > 0.5 ? Random.Range(0, oreGen.ores[j].maxSellQty) : 0,
-                    });
-                }
-            }
-        }
 
         public void LoadSlots()
         {
@@ -144,6 +123,8 @@ namespace HackedDesign
                 state.playingState = PlayStateEnum.PLAY;
             }
 
+            player.transform.position = new Vector2(state.playerState.playerPositionX, state.playerState.playerPositionY);
+
             SaveGame();
         }
 
@@ -158,7 +139,7 @@ namespace HackedDesign
 
             var item = planet.planetState.items.First(i => i.name == hold.cargoName && i.type == hold.cargoType);
 
-            if(item == null)
+            if (item == null)
                 return false;
 
             var credits = item.price;
@@ -168,7 +149,7 @@ namespace HackedDesign
             hold.count--;
             item.qty++;
 
-            if(hold.count ==0)
+            if (hold.count == 0)
             {
                 hold.cargoType = "";
                 hold.cargoName = "";
@@ -221,11 +202,11 @@ namespace HackedDesign
                     hold = state.shipState.cargoHold.FirstOrDefault(h => h.cargoType == "");
                     hold.cargoType = "Ore";
                     hold.cargoName = name;
-                    
+
                 }
 
                 int total = Mathf.Min(count, hold.maxCount - hold.count);
-                for(int j = 0;j< count; j++)
+                for (int j = 0; j < count; j++)
                 {
                     hold.solTimer.Add(state.sol);
                 }
@@ -317,11 +298,6 @@ namespace HackedDesign
             Application.Quit();
         }
 
-        //public void SetHoverPlanet(Planet planet)
-        //{
-        //    hoverPlanet = planet;
-        //}
-
         public void SetSelectable(Selectable selectable)
         {
 
@@ -349,6 +325,55 @@ namespace HackedDesign
             return selectedObject;
         }
 
+        private void UpdateDecay()
+        {
+            Logger.Log(name, "Decay");
+            for (int i = 0; i < state.shipState.cargoHold.Count; i++)
+            {
+                if (state.shipState.cargoHold[i].cargoType != "Ore")
+                    continue;
+
+                var hold = state.shipState.cargoHold[i];
+
+                for (int j = hold.solTimer.Count - 1; j >= 0; j--)
+                {
+                    var ore = oreGen.GetOre(state.shipState.cargoHold[i].cargoName);
+                    var timeout = ore.decayRate;
+                    if (state.shipState.cargoHold[i].solTimer[j] + timeout < state.sol)
+                    {
+                        hold.count--;
+                        hold.solTimer.RemoveAt(j);
+
+                        if (hold.count == 0)
+                        {
+                            hold.cargoType = "";
+                            hold.cargoName = "";
+                        }
+
+
+                        Logger.Log(name, ore.name, " decayed");
+                    }
+                }
+            }
+        }
+
+        private void UpdateMarketPrices()
+        {
+            for (int i = 0; i < state.planets.Count; i++)
+            {
+                state.planets[i].items = new List<PlanetItem>(oreGen.ores.Count);
+                for (int j = 0; j < oreGen.ores.Count; j++)
+                {
+                    state.planets[i].items.Add(new PlanetItem()
+                    {
+                        type = "Ore",
+                        name = oreGen.ores[j].name,
+                        price = Random.Range(oreGen.ores[j].minPrice, oreGen.ores[j].maxPrice + 1),
+                        qty = Random.value > 0.5 ? Random.Range(0, oreGen.ores[j].maxSellQty) : 0,
+                    });
+                }
+            }
+        }
         private void UpdateTime()
         {
             switch (gameState)
