@@ -38,13 +38,11 @@ namespace HackedDesign
         private bool dirty = true;
 
 
-        // Start is called before the first frame update
         void Awake()
         {
             canvasGroup = GetComponent<CanvasGroup>();
         }
 
-        // Update is called once per frame
         void Update()
         {
             if (Game.instance.gameState == GameStateEnum.PLAYING && Game.instance.state.playingState == PlayStateEnum.MARKET)
@@ -88,8 +86,6 @@ namespace HackedDesign
             }
 
             title.text = currentPlanet.planetState.name + " Trading Market";
-            repText.text = currentPlanet.planetState.reputation.ToString();
-            //description.text = p.planetState.description;
             UpdateItems(currentPlanet);
         }
 
@@ -98,21 +94,17 @@ namespace HackedDesign
             Logger.Log(name, "items count", planet.planetState.items.Count.ToString());
 
             //Delete children
-
             for(int i=0; i< itemParent.transform.childCount;i++)
             {
                 Destroy(itemParent.transform.GetChild(i).gameObject);
             }
 
-
-            foreach (var planetItem in planet.planetState.items)
+            foreach (var planetItem in planet.planetState.items.OrderBy(e => e.price))
             {
                 var item = Instantiate(itemPrefab, itemParent.transform);
                 var marketItem = item.GetComponent<MarketItem>();
                 marketItem.UpdatePanel(planetItem);
             }
-
-
         }
 
         private void UpdateCargoGroups()

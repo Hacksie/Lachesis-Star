@@ -9,8 +9,6 @@ namespace HackedDesign
     {
         [Header("Runtime GameObjects")]
         [SerializeField] private Rigidbody2D rigidBody = null;
-        [Header("Configured GameObjects")]
-        [SerializeField] private ShipData shipData = null;
         [Header("Settings")]
         [SerializeField] private float turnRate = 180.0f;
         //[SerializeField] private float maxThrust = 5.0f;
@@ -34,10 +32,7 @@ namespace HackedDesign
             {
                 transform.Rotate(new Vector3(0, 0, -1.0f * turn * turnRate * Time.deltaTime));
 
-                var engine1 = shipData.GetEngine(Game.instance.state.shipState.engines[0]);
-                var engine2 = shipData.GetEngine(Game.instance.state.shipState.engines[1]);
-
-                maxThrust = engine1.thrustRate + engine2.thrustRate;
+                maxThrust = Game.instance.state.shipState.engines[0].thrustRate + Game.instance.state.shipState.engines[1].thrustRate;
                 currentThrust = thrust * maxThrust;
 
                 float force = currentThrust * Time.deltaTime;
@@ -79,9 +74,14 @@ namespace HackedDesign
         {
             if (context.performed)
             {
-                thrust = 0.0f;
-                rigidBody.velocity = Vector2.zero;
+                PerformBrake();
             }
+        }
+
+        public void PerformBrake()
+        {
+            thrust = 0.0f;
+            rigidBody.velocity = Vector2.zero;
         }
 
         public void Ship(InputAction.CallbackContext context)

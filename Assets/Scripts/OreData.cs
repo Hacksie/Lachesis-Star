@@ -15,6 +15,8 @@ namespace HackedDesign
         public int maxSellQty;
         public Sprite cargoSprite;
         public int decayRate;
+        public string description;
+        public float probability;
     }
 
     public enum OreType

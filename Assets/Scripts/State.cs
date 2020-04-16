@@ -19,10 +19,12 @@ namespace HackedDesign
         public List<OreState> ores;
         public PlanetItem selectedPlanetItem;
         public CargoHold selectedCargoHold;
+        public Engine selectedEngine;
+        //public Engine
         public int sol;
         public float solTimer;
 
-        
+
 
         public State()
         {
@@ -48,7 +50,7 @@ namespace HackedDesign
             Logger.Log("State", "Saved ", path);
         }
 
-        
+
     }
 
     [System.Serializable]
@@ -69,14 +71,12 @@ namespace HackedDesign
     {
         public int cargoUpgrades = 0;
         public float fuel = 0;
-        public string[] engines = new string[2];
-        public List<CargoHold> cargoHold; 
+        public Engine[] engines = new Engine[2];
+        public List<CargoHold> cargoHold;
         public ShipState()
         {
-            engines[0] = "Ion Thruster";
-            engines[1] = "Ion Thruster";
-            cargoHold = new List<CargoHold>(16);
-            for(int i=0; i < 16; i++)
+            cargoHold = new List<CargoHold>(14);
+            for (int i = 0; i < 14; i++)
             {
                 cargoHold.Add(new CargoHold()
                 {
@@ -109,6 +109,7 @@ namespace HackedDesign
     public class PlanetItem
     {
         public string name;
+        public string description;
         public string type;
         public int qty;
         public int price;
@@ -131,6 +132,10 @@ namespace HackedDesign
     public class Engine
     {
         public string name;
+        public string description;
+        public float thrustRate;
+
+
     }
 
     [System.Serializable]
@@ -159,6 +164,7 @@ namespace HackedDesign
         CARGO,
         MAP,
         MARKET,
+        BLACKHOLE,
         END
     }
 

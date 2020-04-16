@@ -42,8 +42,10 @@ namespace HackedDesign
             Logger.Log(name, "Trigger");
             if (!oreState.touched)
             {
-                Game.instance.AddOre(oreState.name, oreState.count);
-                oreState.touched = true;
+                if (Game.instance.AddOre(oreState.name, oreState.count))
+                {
+                    oreState.touched = true;
+                }
             }
             
         }

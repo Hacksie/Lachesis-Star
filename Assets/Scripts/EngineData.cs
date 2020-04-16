@@ -11,5 +11,7 @@ namespace HackedDesign
         public string description;
         public float thrustRate;
         public float fuelRate;
+        public int minPrice;
+        public int maxPrice;
     }
 }

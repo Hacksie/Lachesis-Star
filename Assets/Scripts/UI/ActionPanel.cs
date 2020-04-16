@@ -28,11 +28,6 @@ namespace HackedDesign
             }
         }
 
-        public void InteractClicked()
-        {
-            Logger.Log(name, "Interact Clicked");
-        }
-
         public void MapClicked()
         {
             Logger.Log(name, "Map Clicked");

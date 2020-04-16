@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3117211309626011188}
   - component: {fileID: 5918935991506499844}
   - component: {fileID: 9147645762030913054}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -110,7 +110,7 @@ GameObject:
   - component: {fileID: 8358607804672575348}
   - component: {fileID: 6187615102825531622}
   - component: {fileID: 8911861675742519292}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -188,8 +188,8 @@ GameObject:
   - component: {fileID: 8618631386739438035}
   - component: {fileID: 8618631386739438034}
   - component: {fileID: 6819109935046190731}
-  - component: {fileID: 7871404852717381355}
-  m_Layer: 8
+  - component: {fileID: 2022807085421041333}
+  m_Layer: 0
   m_Name: Blackhole
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -272,13 +272,13 @@ CircleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 8
---- !u!114 &7871404852717381355
+--- !u!114 &2022807085421041333
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -287,13 +287,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 8618631386739438032}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4b0901c390d5a234f84c2ece07864ee8, type: 3}
+  m_Script: {fileID: 11500000, guid: aab6924e08010b745820c87c54775def, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 2
-  selectEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  hoverIndicator: {fileID: 0}
-  planet: {fileID: 0}
-  ore: {fileID: 0}

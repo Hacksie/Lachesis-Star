@@ -12,12 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f787b628b10c0864bbed014e278629f0, type: 3}
   m_Name: Plutox
   m_EditorClassIdentifier: 
-  symbol: 
+  symbol: PuX
   oreType: 0
   hue: 0
   colorValue: 0
   minPrice: 10000
   maxPrice: 50000
   maxSellQty: 2
-  cargoSprite: {fileID: 0}
+  cargoSprite: {fileID: 21300000, guid: 8fc39aec61385f942a4948402f5fef12, type: 3}
   decayRate: 2
+  description: 
+  probability: 0.01

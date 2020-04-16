@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
 
 namespace HackedDesign
 {
@@ -9,6 +10,7 @@ namespace HackedDesign
     public class MainMenuPanel : MonoBehaviour
     {
         private CanvasGroup canvasGroup = null;
+        [Header("Configured Game Objects")]
         [SerializeField] private CanvasGroup startPanel = null;
         [SerializeField] private CanvasGroup optionsPanel = null;
         [SerializeField] private CanvasGroup creditsPanel = null;
@@ -16,11 +18,30 @@ namespace HackedDesign
         [SerializeField] private Text slot1desc = null;
         [SerializeField] private Text slot2desc = null;
         [SerializeField] private int selectedSlot = 0;
+        [SerializeField] private Dropdown resolutionsDropdown = null;
+        [SerializeField] private Toggle fullScreenToggle = null;
+        [SerializeField] private Slider fxSlider = null;
+        [SerializeField] private Slider musicSlider = null;
+        [SerializeField] private UnityEngine.Audio.AudioMixer masterMixer;
 
         // Start is called before the first frame update
         void Start()
         {
             canvasGroup = GetComponent<CanvasGroup>();
+            PopulateOptionsValues();
+        }
+
+        void PopulateOptionsValues()
+        {
+            resolutionsDropdown.ClearOptions();
+            resolutionsDropdown.AddOptions(Screen.resolutions.ToList().ConvertAll(r => new Dropdown.OptionData(r.ToString())));
+            resolutionsDropdown.value = Screen.resolutions.ToList().IndexOf(Screen.currentResolution);
+            fullScreenToggle.isOn = Screen.fullScreen;
+
+            masterMixer.GetFloat("FXVolume", out float fxVolume);
+            masterMixer.GetFloat("MusicVolume", out float musicVolume);
+            fxSlider.value = (fxVolume + 80) / 100;
+            musicSlider.value = (musicVolume + 80) / 100;
         }
 
         // Update is called once per frame
@@ -169,6 +190,21 @@ namespace HackedDesign
             Logger.Log(name, "Credits Close");
             Game.instance.menuState = MenuStateEnum.NONE;
             UpdatePanels();
+        }
+
+        public void SetResolution()
+        {
+            Resolution res = Screen.resolutions.ToList()[resolutionsDropdown.value];
+            Screen.SetResolution(res.width, res.height, fullScreenToggle.isOn, res.refreshRate);
+        }
+
+        public void SetVolumes()
+        {
+            float fxVolume = fxSlider.value * 100 - 80;
+            float musicVolume = musicSlider.value * 100 - 80;
+
+            masterMixer.SetFloat("FXVolume", fxVolume);
+            masterMixer.SetFloat("MusicVolume", musicVolume);
         }
     }
 }

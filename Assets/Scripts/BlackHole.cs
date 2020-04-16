@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace HackedDesign
 {
-    public class PlanetData : MonoBehaviour
+    public class BlackHole : MonoBehaviour
     {
         // Start is called before the first frame update
         void Start()
@@ -15,6 +15,12 @@ namespace HackedDesign
         // Update is called once per frame
         void Update()
         {
+
+        }
+        public void OnTriggerEnter2D(Collider2D collider)
+        {
+            Logger.Log(name, "Trigger");
+            Game.instance.SetPlayStateBlackHole();
 
         }
     }

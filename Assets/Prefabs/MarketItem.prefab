@@ -34,7 +34,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -2, y: -2}
+  m_AnchoredPosition: {x: -2, y: -12}
   m_SizeDelta: {x: -56, y: 10}
   m_Pivot: {x: 1, y: 1}
 --- !u!222 &13718306412430089
@@ -262,6 +262,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   planetItem:
     name: 
+    description: 
     type: 
     qty: 0
     price: 0
@@ -344,7 +345,7 @@ AudioSource:
   m_GameObject: {fileID: 2424700406322158528}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 204143050292034298, guid: 033d708e23c6fa0439e7ec2ae2ef86e3, type: 2}
   m_audioClip: {fileID: 8300000, guid: 345e5177d85369640ac5070309d6cf2d, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
@@ -554,7 +555,7 @@ AudioSource:
   m_GameObject: {fileID: 7150913668505269278}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 204143050292034298, guid: 033d708e23c6fa0439e7ec2ae2ef86e3, type: 2}
   m_audioClip: {fileID: 8300000, guid: ea1bff92e03e9ea468ceb38a072101c5, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.3
@@ -675,8 +676,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -18, y: -2}
-  m_SizeDelta: {x: -20, y: 10}
+  m_AnchoredPosition: {x: -2, y: -2}
+  m_SizeDelta: {x: -4, y: 10}
   m_Pivot: {x: 1, y: 1}
 --- !u!222 &6801432916509760924
 CanvasRenderer:

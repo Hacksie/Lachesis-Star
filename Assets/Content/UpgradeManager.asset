@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37c13b6ab66ee9a4bb2da5f44ca75919, type: 3}
+  m_Name: UpgradeManager
+  m_EditorClassIdentifier: 
+  upgradesCargo:
+  - {fileID: 11400000, guid: c640d33faf1594545b25f63dad623dc3, type: 2}
+  - {fileID: 11400000, guid: 1194ab257c2fe364f8db1bded45006d9, type: 2}
+  upgradesEngines:
+  - {fileID: 11400000, guid: d431b6007f54a1e41be180e62ff7d4d9, type: 2}
+  - {fileID: 11400000, guid: bf1f1263b53821b46af4f6a998f1ff08, type: 2}
+  - {fileID: 11400000, guid: dc3bfb4255b474047a16dd71ea779cd7, type: 2}
+  - {fileID: 11400000, guid: a5450f434cfca8944b4a4af09af78fc6, type: 2}
+  - {fileID: 11400000, guid: aa0caee565a751644ac3493168d15e31, type: 2}
+  engines:
+  - {fileID: 11400000, guid: bf1f1263b53821b46af4f6a998f1ff08, type: 2}
+  - {fileID: 11400000, guid: dc3bfb4255b474047a16dd71ea779cd7, type: 2}
+  - {fileID: 11400000, guid: a5450f434cfca8944b4a4af09af78fc6, type: 2}
+  - {fileID: 11400000, guid: aa0caee565a751644ac3493168d15e31, type: 2}

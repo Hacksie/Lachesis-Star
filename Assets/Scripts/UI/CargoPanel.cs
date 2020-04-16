@@ -26,16 +26,14 @@ namespace HackedDesign
         [SerializeField] Text cargoItemText = null;
         [SerializeField] Image cargoItemImage = null;
         [SerializeField] Text cargoItemTypeText = null;
-        [SerializeField] Text cargoMinPriceText = null;
-        [SerializeField] Text cargoMaxPriceText = null;
+        [SerializeField] List<Text> cargoSolTimes = null;
+        
 
         [Header("Engine Frame")]
         [SerializeField] Text engineText = null;
         [SerializeField] Text engineNameText = null;
-        [SerializeField] Text engineImage = null;
-        [SerializeField] Text engineLevelText = null;
-        [SerializeField] Text engineFuelText = null;
-        [SerializeField] Text engineMaxThrust = null;
+        [SerializeField] Image engineImage = null;
+        [SerializeField] Text engineThrustText = null;
 
         bool dirty = true;
 
@@ -97,7 +95,6 @@ namespace HackedDesign
             for (int i = 0; i < cargoItems.Count; i++)
             {
                 CargoHold hold = Game.instance.state.shipState.cargoHold[i];
-                //cargoItems[i].cargoHold = hold;
                 cargoItems[i].UpdatePanel(hold);
             }
         }
@@ -126,13 +123,17 @@ namespace HackedDesign
 
         private void UpdateShipSelectedEmpty()
         {
-            cargoHoldText.text = "Hold " + (Game.instance.state.selectedCargoHold == null ? "" : Game.instance.state.selectedCargoHold.holdId.ToString()) + " ()";
+            var hold = Game.instance.state.selectedCargoHold;
+            cargoHoldText.text = "Hold " + (hold == null ? "" : hold.holdId.ToString()) + " ()";
             cargoItemText.text = "";
             cargoItemImage.sprite = null;
             cargoItemImage.color = Color.black;
             cargoItemTypeText.text = "Empty";
-            cargoMaxPriceText.text = "";
-            cargoMinPriceText.text = "";
+            for(int i=0; i< cargoSolTimes.Count;i++)
+            {
+                cargoSolTimes[i].text = "Empty";               
+            }
+            
         }
 
         private void UpdateShipSelectedOre(CargoHold hold)
@@ -144,6 +145,17 @@ namespace HackedDesign
             cargoItemImage.sprite = ore.cargoSprite;
             cargoItemImage.color = palette.GetColor(ore.hue, ore.colorValue);
             cargoItemTypeText.text = hold.cargoType;
+            for (int i = 0; i < cargoSolTimes.Count; i++)
+            {
+                if (hold.solTimer == null || i >= hold.solTimer.Count)
+                {
+                    cargoSolTimes[i].text = "Empty";
+                }
+                else
+                {
+                    cargoSolTimes[i].text = hold.solTimer[i] >= 0 ? "Empty" : hold.solTimer[i].ToString() + " Sol";
+                }
+            }
         }
 
         private void UpdateEngineSelected(int selected)

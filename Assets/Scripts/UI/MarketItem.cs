@@ -60,7 +60,7 @@ namespace HackedDesign
             }
 
             this.planetItem = planetItem;
-            nameText.text = planetItem.name;
+            nameText.text = planetItem.name + " " + planetItem.description;
             qtyText.text = planetItem.qty.ToString();
             priceText.text = "$" + planetItem.price;
         }

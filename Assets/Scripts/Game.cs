@@ -18,6 +18,8 @@ namespace HackedDesign
         [SerializeField] public PlayerController player;
         [SerializeField] public Universe universe;
         [SerializeField] public OreGen oreGen;
+        [SerializeField] public UpgradeManager upgradeManager;
+        [SerializeField] public EngineData defaultEngine;
 
         public static Game instance;
 
@@ -128,92 +130,6 @@ namespace HackedDesign
             SaveGame();
         }
 
-        public bool SellCargoItem(Planet planet)
-        {
-            var hold = state.selectedCargoHold;
-
-            if (hold.count <= 0)
-                return false;
-
-            Logger.Log(name, "Finding planet item price", hold.cargoName, hold.cargoType);
-
-            var item = planet.planetState.items.First(i => i.name == hold.cargoName && i.type == hold.cargoType);
-
-            if (item == null)
-                return false;
-
-            var credits = item.price;
-
-            state.credits += credits;
-            hold.solTimer.RemoveAt(0);
-            hold.count--;
-            item.qty++;
-
-            if (hold.count == 0)
-            {
-                hold.cargoType = "";
-                hold.cargoName = "";
-            }
-
-
-            return true;
-        }
-
-        public bool BuySelectedItem()
-        {
-            var item = state.selectedPlanetItem;
-
-            if (item.qty <= 0)
-                return false;
-
-            if (state.credits < item.price)
-                return false;
-
-            state.credits -= item.price;
-            item.qty--;
-
-            switch (item.type)
-            {
-                case "Ore":
-                    AddOre(item.name, 1);
-                    break;
-            }
-
-            return false;
-        }
-
-
-
-        // Probably should have its own class
-        public void AddOre(string name, int count)
-        {
-            Logger.Log(this.name, "Add Ore", name, count.ToString());
-
-            for (int i = 0; i < state.shipState.cargoHold.Count; i++)
-            {
-                if (count <= 0)
-                    break;
-
-                CargoHold hold = state.shipState.cargoHold.FirstOrDefault(h => h.cargoType == "Ore" && h.cargoName == name && h.count < h.maxCount);
-
-                if (hold == null)
-                {
-                    Logger.Log(name, "no existing hold found");
-                    hold = state.shipState.cargoHold.FirstOrDefault(h => h.cargoType == "");
-                    hold.cargoType = "Ore";
-                    hold.cargoName = name;
-
-                }
-
-                int total = Mathf.Min(count, hold.maxCount - hold.count);
-                for (int j = 0; j < count; j++)
-                {
-                    hold.solTimer.Add(state.sol);
-                }
-                hold.count += total;
-                count -= total;
-            }
-        }
 
         public void NewGame()
         {
@@ -226,6 +142,21 @@ namespace HackedDesign
             universe.SpawnOres(state.ores);
             UpdateMarketPrices();
             state.started = true;
+            state.playerState.playerPositionX = 0;
+            state.playerState.playerPositionY = 25;
+            state.shipState.engines[0] = new Engine()
+            {
+                name = defaultEngine.name,
+                description = defaultEngine.description,
+                thrustRate = defaultEngine.thrustRate
+            };
+            state.shipState.engines[1] = new Engine()
+            {
+                name = defaultEngine.name,
+                description = defaultEngine.description,
+                thrustRate = defaultEngine.thrustRate
+            };
+
         }
 
         public void LoadGame()
@@ -256,6 +187,11 @@ namespace HackedDesign
         {
             SaveGame();
             state.playingState = PlayStateEnum.CARGO;
+        }
+
+        public void SetPlayStateBlackHole()
+        {
+            state.playingState = PlayStateEnum.BLACKHOLE;
         }
 
         public void ToggleCargo()
@@ -325,6 +261,156 @@ namespace HackedDesign
             return selectedObject;
         }
 
+        public bool SellCargoItem(Planet planet)
+        {
+            var hold = state.selectedCargoHold;
+
+            if (hold.count <= 0)
+                return false;
+
+            Logger.Log(name, "Finding planet item price", hold.cargoName, hold.cargoType);
+
+            var item = planet.planetState.items.First(i => i.name == hold.cargoName && i.type == hold.cargoType);
+
+            if (item == null)
+                return false;
+
+            var credits = item.price;
+
+            state.credits += credits;
+            hold.solTimer.RemoveAt(0);
+            item.qty++;
+
+            if (hold.count == 0)
+            {
+                hold.cargoType = "";
+                hold.cargoName = "";
+            }
+
+
+            return true;
+        }
+
+        public bool BuySelectedItem()
+        {
+            var success = false;
+            var item = state.selectedPlanetItem;
+
+            if (item.qty <= 0)
+                return false;
+
+            if (state.credits < item.price)
+                return false;
+
+            switch (item.type)
+            {
+                case "Ore":
+                    success = AddOre(item.name, 1);
+                    break;
+                case "UpgradeCargo":
+                    success = AddUpgradeCargo(item);
+                    break;
+                case "UpgradeEngine":
+                    success = AddUpgradeEngine(item);
+                    break;
+            }
+
+            if (success)
+            {
+                state.credits -= item.price;
+                item.qty--;
+                return true;
+            }
+            else
+            {
+                Logger.Log(name, "Buy unsuccessful");
+            }
+
+            return false;
+        }
+
+        public bool AddOre(PlanetItem item)
+        {
+            return AddOre(item.name, item.qty);
+        }
+
+
+        // Probably should have its own class
+        public bool AddOre(string name, int count)
+        {
+            Logger.Log(this.name, "Add Ore", name, count.ToString());
+
+            for (int i = 0; i < state.shipState.cargoHold.Count; i++)
+            {
+                if (count <= 0)
+                    break;
+
+                CargoHold hold = state.shipState.cargoHold.FirstOrDefault(h => h.cargoType == "Ore" && h.cargoName == name && h.count < h.maxCount);
+
+                if (hold == null)
+                {
+                    Logger.Log(name, "no existing hold found");
+                    hold = state.shipState.cargoHold.FirstOrDefault(h => h.cargoType == "");
+                    hold.cargoType = "Ore";
+                    hold.cargoName = name;
+
+                }
+
+                int total = Mathf.Min(count, hold.maxCount - hold.count);
+                for (int j = 0; j < count; j++)
+                {
+                    hold.solTimer.Add(state.sol);
+                }
+                hold.count += total;
+                count -= total;
+            }
+
+            if (count == 0)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool AddUpgradeCargo(PlanetItem item)
+        {
+            CargoUpgradeData cargoUpgradeData = upgradeManager.upgradesCargo.First(e => e.name == item.name);
+
+            if (state.shipState.cargoUpgrades < cargoUpgradeData.level)
+            {
+                state.shipState.cargoUpgrades = cargoUpgradeData.level;
+                return true;
+            }
+            return false;
+        }
+
+        public bool AddUpgradeEngine(PlanetItem item)
+        {
+            EngineData engine = upgradeManager.upgradesEngines.First(e => e.name == item.name);
+            Logger.Log(name, engine.name, engine.thrustRate.ToString(), " to upgrade");
+
+            var engineToUpgrade = state.shipState.engines[0].thrustRate < state.shipState.engines[1].thrustRate ? state.shipState.engines[0] : state.shipState.engines[1];
+
+            if (engineToUpgrade.thrustRate < engine.thrustRate)
+            {
+                Logger.Log(name, engineToUpgrade.name, "upgrade engine");
+                engineToUpgrade = new Engine()
+                {
+                    name = engine.name,
+                    description = engine.description,
+                    thrustRate = engine.thrustRate
+                };
+
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Each sol, check if any cargo in the ship has decayed
+        /// </summary>
         private void UpdateDecay()
         {
             Logger.Log(name, "Decay");
@@ -350,30 +436,62 @@ namespace HackedDesign
                             hold.cargoName = "";
                         }
 
-
                         Logger.Log(name, ore.name, " decayed");
                     }
                 }
             }
         }
 
+        /// <summary>
+        /// Each sol, refresh market prices across all planets.
+        /// </summary>
         private void UpdateMarketPrices()
         {
             for (int i = 0; i < state.planets.Count; i++)
             {
-                state.planets[i].items = new List<PlanetItem>(oreGen.ores.Count);
+                state.planets[i].items = new List<PlanetItem>(oreGen.ores.Count + upgradeManager.upgradesCargo.Count + upgradeManager.upgradesEngines.Count);
                 for (int j = 0; j < oreGen.ores.Count; j++)
                 {
                     state.planets[i].items.Add(new PlanetItem()
                     {
                         type = "Ore",
+                        description = "(" + oreGen.ores[j].decayRate + " Sols)",
                         name = oreGen.ores[j].name,
                         price = Random.Range(oreGen.ores[j].minPrice, oreGen.ores[j].maxPrice + 1),
-                        qty = Random.value > 0.5 ? Random.Range(0, oreGen.ores[j].maxSellQty) : 0,
+                        qty = Random.value > 0.5 ? Random.Range(0, oreGen.ores[j].maxSellQty) : 0
                     });
                 }
+
+                for (int k = 0; k < upgradeManager.upgradesCargo.Count; k++)
+                {
+                    state.planets[i].items.Add(new PlanetItem()
+                    {
+                        type = "UpgradeCargo",
+                        description = "",
+                        name = upgradeManager.upgradesCargo[k].name,
+                        price = Random.Range(upgradeManager.upgradesCargo[k].minPrice, upgradeManager.upgradesCargo[k].maxPrice + 1),
+                        qty = 1
+                    });
+                }
+
+                for (int k = 0; k < upgradeManager.upgradesEngines.Count; k++)
+                {
+                    state.planets[i].items.Add(new PlanetItem()
+                    {
+                        type = "UpgradeEngine",
+                        description = "",
+                        name = upgradeManager.upgradesEngines[k].name,
+                        price = Random.Range(upgradeManager.upgradesEngines[k].minPrice, upgradeManager.upgradesEngines[k].maxPrice + 1),
+                        qty = 1
+                    });
+                }
+
             }
         }
+
+        /// <summary>
+        /// Auto update game timescale according to game state
+        /// </summary>
         private void UpdateTime()
         {
             switch (gameState)
@@ -389,6 +507,7 @@ namespace HackedDesign
                         case PlayStateEnum.MAP:
                         case PlayStateEnum.MARKET:
                         case PlayStateEnum.END:
+                        case PlayStateEnum.BLACKHOLE:
                             Time.timeScale = 0;
                             break;
                         case PlayStateEnum.PLAY:
@@ -398,9 +517,5 @@ namespace HackedDesign
                     break;
             }
         }
-
-
-
-
     }
 }

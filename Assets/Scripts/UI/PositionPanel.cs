@@ -56,7 +56,7 @@ namespace HackedDesign
         {
             XText.text = $"{player.transform.position.x:N1}";
             YText.text = $"{player.transform.position.y:N1}";
-            SpeedText.text = $"{player.currentThrust:N1} / {player.maxThrust:N1}";
+            SpeedText.text = $"{player.currentThrust:N0} / {player.maxThrust:N0}";
             CreditsText.text = $"${Game.instance.state.credits}";
             TimerText.text = $"Sol {Game.instance.state.sol}'{Game.instance.state.solTimer:N0}";
         }
