@@ -16,8 +16,8 @@ MonoBehaviour:
   oreType: 0
   hue: 7
   colorValue: 3
-  minPrice: 5
-  maxPrice: 50
+  minPrice: 25
+  maxPrice: 77
   maxSellQty: 20
   cargoSprite: {fileID: 21300000, guid: 8fc39aec61385f942a4948402f5fef12, type: 3}
   decayRate: 11

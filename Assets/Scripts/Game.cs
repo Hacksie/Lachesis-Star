@@ -20,19 +20,15 @@ namespace HackedDesign
         [SerializeField] public OreGen oreGen;
         [SerializeField] public UpgradeManager upgradeManager;
         [SerializeField] public EngineData defaultEngine;
+        [SerializeField] public EngineData successEngine;
+        [SerializeField] public AudioSource soundtrack;
 
         public static Game instance;
 
         [Header("Runtime GameObjects")]
         [SerializeField] private Selectable selectedObject;
 
-        [Header("Settings")]
-        [SerializeField] private int planetItemCount = 6;
-        [SerializeField] private int marketOreCount = 10;
-        [SerializeField] private int marketUpgradeCount = 10;
-
         [SerializeField] private float solMarketTimer = 60.0f;
-        [SerializeField] public float planetMarketTimerCountdown = 0.0f;
 
         public Game()
         {
@@ -65,6 +61,7 @@ namespace HackedDesign
         // Update is called once per frame
         void Update()
         {
+            CheckGameOverSuccess();
             UpdateTime();
             UpdateMarketTimer();
         }
@@ -74,22 +71,18 @@ namespace HackedDesign
             if (gameState == GameStateEnum.PLAYING)
             {
                 state.solTimer += Time.deltaTime;
-                planetMarketTimerCountdown += Time.deltaTime;
             }
 
-            if (planetMarketTimerCountdown >= solMarketTimer)
+            if (state.solTimer >= solMarketTimer)
             {
                 state.solTimer = 0;
                 state.sol++;
-                planetMarketTimerCountdown = 0;
                 // Update market prices
                 UpdateMarketPrices();
                 UpdateDecay();
                 universe.UpdateOres();
             }
         }
-
-
 
         public void LoadSlots()
         {
@@ -112,22 +105,36 @@ namespace HackedDesign
         public void StartGame(int slot)
         {
             currentSlot = slot;
-            gameState = GameStateEnum.PLAYING;
-            if (slots[currentSlot] == null || !slots[currentSlot].started)
+            if (slots[currentSlot] != null && slots[currentSlot].success)
             {
+                return; //FIXME: Play a negative beep or something.
+            }
+            else if (slots[currentSlot] == null || !slots[currentSlot].started)
+            {
+                universe.ClearGameObjects();
+                menuState = MenuStateEnum.NONE;
+                gameState = GameStateEnum.PLAYING;
                 NewGame();
                 state.playingState = PlayStateEnum.INTRO;
+
             }
             else
             {
+                universe.ClearGameObjects();
+                menuState = MenuStateEnum.NONE;
+                gameState = GameStateEnum.PLAYING;
                 state = slots[currentSlot];
                 LoadGame();
                 state.playingState = PlayStateEnum.PLAY;
             }
+            soundtrack.Stop();
+
 
             player.transform.position = new Vector2(state.playerState.playerPositionX, state.playerState.playerPositionY);
 
             SaveGame();
+
+            soundtrack.Play();
         }
 
 
@@ -148,15 +155,16 @@ namespace HackedDesign
             {
                 name = defaultEngine.name,
                 description = defaultEngine.description,
-                thrustRate = defaultEngine.thrustRate
+                thrustRate = defaultEngine.thrustRate,
+                engine = 0
             };
             state.shipState.engines[1] = new Engine()
             {
                 name = defaultEngine.name,
                 description = defaultEngine.description,
-                thrustRate = defaultEngine.thrustRate
+                thrustRate = defaultEngine.thrustRate,
+                engine = 1
             };
-
         }
 
         public void LoadGame()
@@ -390,6 +398,7 @@ namespace HackedDesign
             EngineData engine = upgradeManager.upgradesEngines.First(e => e.name == item.name);
             Logger.Log(name, engine.name, engine.thrustRate.ToString(), " to upgrade");
 
+
             var engineToUpgrade = state.shipState.engines[0].thrustRate < state.shipState.engines[1].thrustRate ? state.shipState.engines[0] : state.shipState.engines[1];
 
             if (engineToUpgrade.thrustRate < engine.thrustRate)
@@ -399,7 +408,8 @@ namespace HackedDesign
                 {
                     name = engine.name,
                     description = engine.description,
-                    thrustRate = engine.thrustRate
+                    thrustRate = engine.thrustRate,
+                    engine = engineToUpgrade.engine
                 };
 
                 return true;
@@ -439,6 +449,16 @@ namespace HackedDesign
                         Logger.Log(name, ore.name, " decayed");
                     }
                 }
+            }
+        }
+
+        private void CheckGameOverSuccess()
+        {
+            if (!state.success && gameState == GameStateEnum.PLAYING && state.playingState == PlayStateEnum.PLAY && state.shipState.engines[0].name == successEngine.name && state.shipState.engines[1].name == successEngine.name)
+            {
+                state.playingState = PlayStateEnum.WIN;
+                state.success = true;
+                SaveGame();
             }
         }
 

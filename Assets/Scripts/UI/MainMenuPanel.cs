@@ -34,7 +34,7 @@ namespace HackedDesign
         void PopulateOptionsValues()
         {
             resolutionsDropdown.ClearOptions();
-            resolutionsDropdown.AddOptions(Screen.resolutions.ToList().ConvertAll(r => new Dropdown.OptionData(r.ToString())));
+            resolutionsDropdown.AddOptions(Screen.resolutions.ToList().ConvertAll(r => new Dropdown.OptionData(r.width + "x" + r.height + " " + r.refreshRate + "Hz")));
             resolutionsDropdown.value = Screen.resolutions.ToList().IndexOf(Screen.currentResolution);
             fullScreenToggle.isOn = Screen.fullScreen;
 
@@ -56,6 +56,7 @@ namespace HackedDesign
             }
             else
             {
+                UpdatePanels();
                 canvasGroup.alpha = 0;
                 canvasGroup.interactable = false;
                 canvasGroup.blocksRaycasts = false;
@@ -173,7 +174,6 @@ namespace HackedDesign
         public void StartGameClicked()
         {
             Logger.Log(name, "Start Game Clicked");
-            Game.instance.menuState = MenuStateEnum.NONE;
             UpdatePanels();
             Game.instance.StartGame(selectedSlot);
         }

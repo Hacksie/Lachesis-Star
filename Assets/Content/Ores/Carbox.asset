@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   symbol: Cx
   oreType: 0
-  hue: 12
-  colorValue: 0
-  minPrice: 5
-  maxPrice: 15
+  hue: 0
+  colorValue: 3
+  minPrice: 10
+  maxPrice: 44
   maxSellQty: 50
   cargoSprite: {fileID: 21300000, guid: 8fc39aec61385f942a4948402f5fef12, type: 3}
   decayRate: 10

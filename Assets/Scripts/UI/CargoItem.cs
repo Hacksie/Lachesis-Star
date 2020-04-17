@@ -11,11 +11,11 @@ namespace HackedDesign
         [Header("Configured Game Objects")]
         [SerializeField] OreGen oreGen = null;
         [SerializeField] Palette palette = null;
-        [SerializeField] private Image frame;
-        [SerializeField] private Text symbol;
-        [SerializeField] private Image image;
-        [SerializeField] private Text qty;
-        [SerializeField] private Color selectedColor;
+        [SerializeField] private Image frame = null;
+        [SerializeField] private Text symbol = null;
+        [SerializeField] private Image image = null;
+        [SerializeField] private Text qty = null;
+        [SerializeField] private Color selectedColor = Color.white;
 
         void Update()
         {

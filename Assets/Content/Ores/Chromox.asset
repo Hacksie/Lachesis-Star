@@ -15,7 +15,7 @@ MonoBehaviour:
   symbol: CrX
   oreType: 0
   hue: 0
-  colorValue: 0
+  colorValue: 1
   minPrice: 2000
   maxPrice: 6000
   maxSellQty: 5

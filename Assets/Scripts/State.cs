@@ -23,7 +23,7 @@ namespace HackedDesign
         //public Engine
         public int sol;
         public float solTimer;
-
+        public bool success = false;
 
 
         public State()
@@ -36,7 +36,7 @@ namespace HackedDesign
 
         public string GetDescription()
         {
-            return started ? $"Last:{lastSaveDate}\nCredit:${credits}" : "Empty Slot";
+            return started ? $"Last:{lastSaveDate}\nCredit:${credits}\nCompleted:{success}" : "Empty Slot";
         }
 
         public void Save(int slot)
@@ -134,8 +134,7 @@ namespace HackedDesign
         public string name;
         public string description;
         public float thrustRate;
-
-
+        public int engine;
     }
 
     [System.Serializable]
@@ -165,6 +164,7 @@ namespace HackedDesign
         MAP,
         MARKET,
         BLACKHOLE,
+        WIN,
         END
     }
 

@@ -8,12 +8,12 @@ namespace HackedDesign
     [RequireComponent(typeof(CanvasGroup))]
     public class MapPanel : MonoBehaviour
     {
-        
-        [SerializeField] private Universe universe;
 
-        [SerializeField] private GameObject pixelPrefab;
-        [SerializeField] private GameObject parent;
-        [SerializeField] private Palette palette;
+        [SerializeField] private Universe universe = null;
+
+        [SerializeField] private GameObject pixelPrefab = null;
+        [SerializeField] private GameObject parent = null;
+        [SerializeField] private Palette palette = null;
 
         [SerializeField] private GameObject shipProxy = null;
         private List<GameObject> pool = new List<GameObject>();

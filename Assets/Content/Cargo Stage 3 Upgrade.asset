@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Cargo Stage 3 Upgrade
   m_EditorClassIdentifier: 
   level: 2
-  minPrice: 15
-  maxPrice: 30
+  minPrice: 150000
+  maxPrice: 300000

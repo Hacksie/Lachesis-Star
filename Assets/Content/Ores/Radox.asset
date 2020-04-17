@@ -17,7 +17,7 @@ MonoBehaviour:
   hue: 11
   colorValue: 1
   minPrice: 10000
-  maxPrice: 60000
+  maxPrice: 66666
   maxSellQty: 5
   cargoSprite: {fileID: 21300000, guid: 8fc39aec61385f942a4948402f5fef12, type: 3}
   decayRate: 3

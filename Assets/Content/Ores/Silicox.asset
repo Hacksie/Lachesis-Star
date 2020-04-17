@@ -15,9 +15,9 @@ MonoBehaviour:
   symbol: SiX
   oreType: 0
   hue: 0
-  colorValue: 0
+  colorValue: 2
   minPrice: 5000
-  maxPrice: 25000
+  maxPrice: 22222
   maxSellQty: 10
   cargoSprite: {fileID: 21300000, guid: 8fc39aec61385f942a4948402f5fef12, type: 3}
   decayRate: 4

@@ -27,15 +27,7 @@ namespace HackedDesign
         [SerializeField] public int planetCount128 = 0;
         [SerializeField] int oreCount = 0;
         
-        void Awake()
-        {
-            //SpawnPlanets();
-        }
 
-        void Update()
-        {
-
-        }
 
         public void UpdateOres()
         {
@@ -56,6 +48,14 @@ namespace HackedDesign
                     Game.instance.state.ores[i].touched = false;
 
                 }
+            }
+        }
+
+        public void ClearGameObjects()
+        {
+            for (int i = 0; i < universeParent.transform.childCount; i++)
+            {
+                Destroy(universeParent.transform.GetChild(i).gameObject);
             }
         }
 

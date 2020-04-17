@@ -10,11 +10,11 @@ namespace HackedDesign
     {
         public PlanetItem planetItem;
         [Header("Configured Game Objects")]
-        [SerializeField] private Image frame;
+        [SerializeField] private Image frame = null;
         [SerializeField] private Color selectedColor;
-        [SerializeField] private Text nameText;
-        [SerializeField] private Text qtyText;
-        [SerializeField] private Text priceText;
+        [SerializeField] private Text nameText = null;
+        [SerializeField] private Text qtyText = null;
+        [SerializeField] private Text priceText = null;
 
         private Button button;
 

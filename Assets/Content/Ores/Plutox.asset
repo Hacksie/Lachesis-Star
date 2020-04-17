@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   symbol: PuX
   oreType: 0
-  hue: 0
-  colorValue: 0
-  minPrice: 10000
-  maxPrice: 50000
+  hue: 12
+  colorValue: 2
+  minPrice: 20000
+  maxPrice: 90000
   maxSellQty: 2
   cargoSprite: {fileID: 21300000, guid: 8fc39aec61385f942a4948402f5fef12, type: 3}
   decayRate: 2
