@@ -286,8 +286,9 @@ namespace HackedDesign
             var credits = item.price;
 
             state.credits += credits;
-            hold.solTimer.RemoveAt(0);
+            
             item.qty++;
+            hold.count--;
 
             if (hold.count == 0)
             {
@@ -295,6 +296,7 @@ namespace HackedDesign
                 hold.cargoName = "";
             }
 
+            hold.solTimer.RemoveAt(0);
 
             return true;
         }
