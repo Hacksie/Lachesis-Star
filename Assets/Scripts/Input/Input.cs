@@ -307,7 +307,7 @@ public class @Input : IInputActionCollection, IDisposable
                 {
                     ""name"": ""negative"",
                     ""id"": ""489ecf02-3801-4b2f-9762-2a5794cfad06"",
-                    ""path"": ""<Keyboard>/w"",
+                    ""path"": ""<Keyboard>/s"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -318,7 +318,7 @@ public class @Input : IInputActionCollection, IDisposable
                 {
                     ""name"": ""positive"",
                     ""id"": ""b1488846-d9cd-4cd5-a077-751fe8424daf"",
-                    ""path"": ""<Keyboard>/s"",
+                    ""path"": ""<Keyboard>/w"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",

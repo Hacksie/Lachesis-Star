@@ -8765,7 +8765,7 @@ MonoBehaviour:
   universe: {fileID: 538119334}
   oreGen: {fileID: 11400000, guid: d56577a410ccef5459dfc37e7dbb230b, type: 2}
   upgradeManager: {fileID: 11400000, guid: 6db72372c0232474d8c89d83091d3713, type: 2}
-  defaultEngine: {fileID: 11400000, guid: d431b6007f54a1e41be180e62ff7d4d9, type: 2}
+  defaultEngine: {fileID: 11400000, guid: bf1f1263b53821b46af4f6a998f1ff08, type: 2}
   successEngine: {fileID: 11400000, guid: aa0caee565a751644ac3493168d15e31, type: 2}
   soundtrack: {fileID: 1592156217}
   selectedObject: {fileID: 0}
@@ -16519,7 +16519,7 @@ MonoBehaviour:
 
 
     <color="#0062a0">hacked</color>.<color="#fdb400">design</color>
-    is the brainchild of Ben Wise.'
+    is Ben Wise.'
 --- !u!222 &1355549008
 CanvasRenderer:
   m_ObjectHideFlags: 0
